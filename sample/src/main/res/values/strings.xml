@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RecyclerViewExpandSample</string>
+
+    <string-array name="best_pratices">
+        <item>ListView</item>
+        <item>Viewpager</item>
+        <item>GroupList</item>
+        <item>GroupGrid</item>
+    </string-array>
+</resources>
