@@ -1,15 +1,11 @@
 package com.arjinmc.expandrecyclerview.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -120,10 +116,199 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     }
 
     /**
+     * notifiy data set change
+     */
+    public void notifyDataChanged() {
+
+        notifyDataSetChanged();
+
+        mGroupPositionMap.clear();
+        mGroupItemCountMap.clear();
+        mChildGroupPositionCacheMap.clear();
+        mChildItemPositionCacheMap.clear();
+
+        mGroupPositionMap = null;
+        mGroupItemCountMap = null;
+        mChildGroupPositionCacheMap = null;
+        mChildItemPositionCacheMap = null;
+        initGroup();
+    }
+
+    /**
+     * get the position in data list with groupPosition and childPosition
+     *
+     * @param groupPosition
+     * @param childPosition
+     * @return
+     */
+    public int getItemInDataListPosition(int groupPosition, int childPosition) {
+        if (mGroupPositionMap == null)
+            return -1;
+        return mGroupPositionMap.get(groupPosition) + 1 + childPosition;
+    }
+
+    /**
+     * overwrite notifyItemChanged
+     *
+     * @param position
+     */
+    public void notifyDataChanged(int position) {
+        notifyItemChanged(position);
+    }
+
+    /**
+     * overwrite notifyItemChanged
+     *
+     * @param groupPosition
+     * @param childPosition
+     */
+    public void notifyDataChanged(int groupPosition, int childPosition) {
+        notifyItemChanged(getItemInDataListPosition(groupPosition, childPosition));
+    }
+
+    /**
+     * overwrite notifyDataRangeInserted
+     *
+     * @param position
+     */
+    public void notifyDataInserted(int position) {
+        notifyDataRangeInserted(position, 1);
+    }
+
+    /**
+     * overwrite notifyDataRangeInserted
+     *
+     * @param groupPosition
+     * @param childPosition
+     */
+    public void notifyDataInserted(int groupPosition, int childPosition) {
+        notifyDataRangeInserted(getItemInDataListPosition(groupPosition, childPosition), 1);
+    }
+
+    /**
+     * overwrite notifyItemMoved
+     *
+     * @param fromPosition
+     * @param toPosition
+     */
+    public void notifyDataMoved(int fromPosition, int toPosition) {
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    /**
+     * overwrite notifyItemMoved
+     *
+     * @param fromGroupPosition
+     * @param fromChildPosition
+     * @param toGroupPosition
+     * @param toChildPosition
+     */
+    public void notifyDataMoved(int fromGroupPosition, int fromChildPosition
+            , int toGroupPosition, int toChildPosition) {
+        int fromPosition = getItemInDataListPosition(fromGroupPosition, fromChildPosition);
+        int toPosition = getItemInDataListPosition(toGroupPosition, toChildPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    /**
+     * overwrite notifyItemRangeRemoved
+     *
+     * @param position
+     */
+    public void notifyDataRemoved(int position) {
+        notifyItemRangeRemoved(position, 1);
+    }
+
+    /**
+     * overwrite notifyItemRangeRemoved
+     *
+     * @param groupPosition
+     * @param childPosition
+     */
+    public void notifyDataRemoved(int groupPosition, int childPosition) {
+        notifyItemRangeRemoved(getItemInDataListPosition(groupPosition, childPosition), 1);
+    }
+
+    /**
+     * overwrite notifyItemRangeChanged
+     *
+     * @param startPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeChanged(int startPosition, int itemCount) {
+        notifyItemRangeChanged(startPosition, itemCount);
+    }
+
+    /**
+     * overwrite notifyItemRangeChanged
+     *
+     * @param startGroupPosition
+     * @param startChildPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeChanged(int startGroupPosition, int startChildPosition, int itemCount) {
+        notifyItemRangeChanged(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+    }
+
+    /**
+     * overwrite notifyItemRangeInserted
+     *
+     * @param startPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeInserted(int startPosition, int itemCount) {
+        notifyItemRangeInserted(startPosition, itemCount);
+    }
+
+    /**
+     * overwrite notifyItemRangeInserted
+     *
+     * @param startGroupPosition
+     * @param startChildPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeInserted(int startGroupPosition, int startChildPosition, int itemCount) {
+        notifyItemRangeInserted(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+    }
+
+    /**
+     * overwrite notifyItemRangeRemoved
+     *
+     * @param startPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeRemoved(int startPosition, int itemCount) {
+        notifyItemRangeRemoved(startPosition, itemCount);
+    }
+
+    /**
+     * overwrite notifyItemRangeRemoved
+     *
+     * @param startGroupPosition
+     * @param startChildPosition
+     * @param itemCount
+     */
+    public void notifyDataRangeRemoved(int startGroupPosition, int startChildPosition, int itemCount) {
+        notifyItemRangeRemoved(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+    }
+
+    /**
+     * get group's item count
+     *
+     * @param groupPosition
+     * @return
+     */
+    public int getItemCount(int groupPosition) {
+        if (mGroupItemCountMap == null)
+            return -1;
+        else
+            return mGroupItemCountMap.get(groupPosition);
+    }
+
+    /**
      * init group info for group count, position map and count map
      */
     private void initGroup() {
-
         mGroupPositionMap = new ArrayMap<>();
         mGroupItemCountMap = new ArrayMap<>();
         mGroupCount = 0;
@@ -213,7 +398,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
         int groupItemCount = mGroupItemCountMap.get(groupPosition);
         int groupRealPosition = mGroupPositionMap.get(groupPosition);
-        positionInGroup = (position - groupRealPosition) % groupItemCount;
+        positionInGroup = (position - groupRealPosition) % groupItemCount - 1;
         mChildItemPositionCacheMap.put(position, positionInGroup);
 
         return positionInGroup;
