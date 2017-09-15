@@ -135,6 +135,29 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     }
 
     /**
+     * get the item count of one group with groupPosition
+     * @param groupPosition
+     * @return
+     */
+    public int getGroupItemCount(int groupPosition){
+        if(mGroupItemCountMap==null)
+            return -1;
+        else
+            return mGroupItemCountMap.get(groupPosition);
+    }
+
+    /**
+     * get the position in data list with groupPosition
+     * @param groupPosition
+     * @return
+     */
+    public int getItemInDataListPosition(int groupPosition){
+        if(mGroupPositionMap==null)
+            return -1;
+        return mGroupPositionMap.get(groupPosition);
+    }
+
+    /**
      * get the position in data list with groupPosition and childPosition
      *
      * @param groupPosition
