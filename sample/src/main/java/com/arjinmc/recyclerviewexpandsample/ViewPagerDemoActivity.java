@@ -25,7 +25,7 @@ public class ViewPagerDemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_demo);
+        setContentView(R.layout.activity_main);
         getSupportActionBar().setSubtitle("ViewPager");
 
         RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);

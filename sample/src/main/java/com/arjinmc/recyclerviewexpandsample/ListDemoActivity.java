@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arjinmc.expandrecyclerview.StickyHeadItemDecoration;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewMultipleTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
@@ -28,7 +29,7 @@ public class ListDemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_demo);
+        setContentView(R.layout.activity_main);
         getSupportActionBar().setSubtitle("List");
 
         final RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);
