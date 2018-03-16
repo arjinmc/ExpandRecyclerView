@@ -6,5 +6,6 @@
         <item>Viewpager</item>
         <item>GroupList</item>
         <item>GroupGrid</item>
+        <item>GroupSticky</item>
     </string-array>
 </resources>

@@ -16,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arjinmc.expandrecyclerview.StickyHeadItemDecoration;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
@@ -62,20 +61,20 @@ public class GroupListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_demo);
+        setContentView(R.layout.activity_group_list);
         getSupportActionBar().setSubtitle("GroupList");
 
-        mRgOption = (RadioGroup) findViewById(R.id.rg_mode);
-        mEtPosition = (EditText) findViewById(R.id.et_position);
-        mEtGroupPosition = (EditText) findViewById(R.id.et_groupPosition);
-        mEtChildPosition = (EditText) findViewById(R.id.et_childPosition);
-        mEtItemCount = (EditText) findViewById(R.id.et_itemCount);
-        mEtCarType = (EditText) findViewById(R.id.et_carType);
+        mRgOption = findViewById(R.id.rg_mode);
+        mEtPosition = findViewById(R.id.et_position);
+        mEtGroupPosition = findViewById(R.id.et_groupPosition);
+        mEtChildPosition = findViewById(R.id.et_childPosition);
+        mEtItemCount = findViewById(R.id.et_itemCount);
+        mEtCarType = findViewById(R.id.et_carType);
 
-        mEtToPosition = (EditText) findViewById(R.id.et_toPosition);
-        mLLtoPosition = (LinearLayout) findViewById(R.id.ll_toPosition);
-        mEtToGroupPosition = (EditText) findViewById(R.id.et_toGroupPosition);
-        mEtToChildPosition = (EditText) findViewById(R.id.et_toChildPosition);
+        mEtToPosition = findViewById(R.id.et_toPosition);
+        mLLtoPosition = findViewById(R.id.ll_toPosition);
+        mEtToGroupPosition = findViewById(R.id.et_toGroupPosition);
+        mEtToChildPosition = findViewById(R.id.et_toChildPosition);
 
         mRgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

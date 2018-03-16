@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);
+        RecyclerView rvList = findViewById(R.id.rv_list);
         rvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
                 .color(Color.GRAY)
                 .thickness(5)
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private void clickPosition(int position) {
         switch (position) {
             case 0:
-                jumpToActivity(ListDemoActivity.class);
+                jumpToActivity(ListActivity.class);
                 break;
             case 1:
                 jumpToActivity(ViewPagerDemoActivity.class);
@@ -64,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 jumpToActivity(GroupGridActivity.class);
+                break;
+            case 4:
+                jumpToActivity(GroupStickyActivity.class);
                 break;
         }
     }

@@ -28,7 +28,7 @@ public class ViewPagerDemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setSubtitle("ViewPager");
 
-        RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);
+        RecyclerView rvList = findViewById(R.id.rv_list);
         RecyclerViewStyleHelper.toViewPager(rvList, LinearLayout.HORIZONTAL);
         List<String> dataList = new ArrayList<>();
         for(int i=0;i<10;i++){

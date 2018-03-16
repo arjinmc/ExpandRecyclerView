@@ -29,6 +29,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':expandrecyclerview')
-    compile 'com.arjinmc.android:recyclerviewdecoration:2.2'
+    compile 'com.arjinmc.android:recyclerviewdecoration:2.3'
 
 }

@@ -4,12 +4,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +15,11 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
+import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Sample for group list
@@ -30,31 +27,38 @@ import java.util.UUID;
  * email: arjinmc@hotmail.com
  */
 
-public class GroupGridActivity extends AppCompatActivity {
+public class GroupStickyActivity extends AppCompatActivity {
+
+    private RecyclerViewGroupAdapter mGroupAdapter;
+    private List<Car> mDataList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setSubtitle("GroupGrid");
+        getSupportActionBar().setSubtitle("GroupSticky");
+
 
         RecyclerView rvList = findViewById(R.id.rv_list);
-        RecyclerViewStyleHelper.toGridView(rvList, 3);
-
-        final List<Car> dataList = new ArrayList<>();
+        RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
+        rvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
+                .color(Color.GRAY)
+                .thickness(3)
+                .create());
+        rvList.addItemDecoration(new RecyclerViewStickyHeadItemDecoration.Builder().isSmooth(true).create());
+        mDataList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Car car = new Car();
             car.setBrand("Car Band" + i);
             car.setTypeName("Car Type" + i * i);
-            car.setUuid(UUID.randomUUID().toString());
             if (i % 10 == 0) {
                 car.setGroup("Group " + (i / 10));
             }
-            dataList.add(car);
+            mDataList.add(car);
         }
 
-        rvList.setAdapter(new RecyclerViewGroupAdapter<>(this, dataList
-                , new int[]{R.layout.item_group_type, R.layout.item_list_type2}
+        mGroupAdapter = new RecyclerViewGroupAdapter<>(this, mDataList
+                , new int[]{R.layout.item_group_type, R.layout.item_list_type1}
                 , new RecyclerViewGroupTypeProcessor<Car>() {
 
             @Override
@@ -66,32 +70,27 @@ public class GroupGridActivity extends AppCompatActivity {
             @Override
             public void onBindItemViewHolder(RecyclerViewViewHolder holder, final int groupPosition, final int itemPosition, Car car) {
                 TextView tvContent = holder.getView(R.id.tv_content);
-                String str = "Car brand:" + car.getBrand() + " / type: " + car.getTypeName();
-                if (itemPosition % 2 == 0) {
-                    str += car.getUuid();
-                }
-                tvContent.setText(str);
+                tvContent.setText("Car brand:" + car.getBrand() + " / type: " + car.getTypeName());
 
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(GroupGridActivity.this
+                        Toast.makeText(GroupStickyActivity.this
                                 , "Group: " + groupPosition + "\titemPosition: " + itemPosition
                                 , Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
 
             @Override
             public int getItemViewType(int position) {
-                if (position % 10 == 0)
+                if (mDataList.get(position).getGroup() != null)
                     return 0;
                 return 1;
             }
-        }));
+        });
 
+        rvList.setAdapter(mGroupAdapter);
     }
 
 }
