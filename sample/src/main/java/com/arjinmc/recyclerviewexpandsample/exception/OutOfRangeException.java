@@ -1,7 +1,7 @@
 package com.arjinmc.recyclerviewexpandsample.exception;
 
 /**
- * 超出范围
+ * OutOfRangeException
  * Created by Eminem Lo on 2018/3/15.
  * email: arjinmc@hotmail.com
  */
@@ -9,6 +9,6 @@ package com.arjinmc.recyclerviewexpandsample.exception;
 public class OutOfRangeException extends Exception {
 
     public OutOfRangeException(){
-        super("");
+        super("The position is out of the range of the data set size");
     }
 }
