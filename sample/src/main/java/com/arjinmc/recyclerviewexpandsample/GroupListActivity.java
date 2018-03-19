@@ -22,6 +22,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
+import com.arjinmc.recyclerviewexpandsample.model.Mode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +35,6 @@ import java.util.UUID;
  */
 
 public class GroupListActivity extends AppCompatActivity {
-
-    private final int OPTION_ADD = 1;
-    private final int OPTION_REMOVE = 2;
-    private final int OPTION_CHANGE = 3;
-    private final int OPTION_MOVE = 4;
 
     private int mOption;
     private int mNum = -1;
@@ -81,19 +77,19 @@ public class GroupListActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_add:
-                        mOption = OPTION_ADD;
+                        mOption = Mode.ADD;
                         showToPosition(false);
                         break;
                     case R.id.rb_remove:
-                        mOption = OPTION_REMOVE;
+                        mOption = Mode.REMOVE;
                         showToPosition(false);
                         break;
                     case R.id.rb_change:
-                        mOption = OPTION_CHANGE;
+                        mOption = Mode.CHANGE;
                         showToPosition(false);
                         break;
                     case R.id.rb_move:
-                        mOption = OPTION_MOVE;
+                        mOption = Mode.MOVE;
                         showToPosition(true);
                         break;
                 }
@@ -152,7 +148,7 @@ public class GroupListActivity extends AppCompatActivity {
         });
 
         rvList.setAdapter(mGroupAdapter);
-        mOption = OPTION_ADD;
+        mOption = Mode.ADD;
     }
 
     @Override
@@ -174,16 +170,16 @@ public class GroupListActivity extends AppCompatActivity {
 
     private void updateAdapter() {
         switch (mOption) {
-            case OPTION_ADD:
+            case Mode.ADD:
                 addCar();
                 break;
-            case OPTION_REMOVE:
+            case Mode.REMOVE:
                 removeCar();
                 break;
-            case OPTION_CHANGE:
+            case Mode.CHANGE:
                 changeCar();
                 break;
-            case OPTION_MOVE:
+            case Mode.MOVE:
                 moveCar();
                 break;
         }
@@ -202,32 +198,40 @@ public class GroupListActivity extends AppCompatActivity {
 
         if (position != -1 && itemCount != -1) {
 
+            List<Car> addCarList = new ArrayList<>();
             for (int i = 0; i < itemCount; i++) {
-                mDataList.add(position + i, createCar());
+                Car car = createCar();
+                mDataList.add(position + i, car);
+                addCarList.add(car);
             }
-            mGroupAdapter.notifyDataRangeInserted(position, itemCount);
+            mGroupAdapter.notifyDataRangeInserted(position, addCarList);
 
         } else if (position != -1) {
 
-            mDataList.add(position, createCar());
-            mGroupAdapter.notifyDataInserted(position);
+            Car car = createCar();
+            mDataList.add(position, car);
+            mGroupAdapter.notifyDataInserted(position, car);
 
         } else if (groupPosition != -1 && childPosition != -1 && itemCount != -1) {
 
             position = mGroupAdapter.getItemInDataListPosition(groupPosition, childPosition);
+            List<Car> addCarList = new ArrayList<>();
             for (int i = 0; i < itemCount; i++) {
-                mDataList.add(position + i, createCar());
+                Car car = createCar();
+                mDataList.add(position + i, car);
+                addCarList.add(car);
             }
-            mGroupAdapter.notifyDataRangeInserted(groupPosition, childPosition, itemCount);
+            mGroupAdapter.notifyDataRangeInserted(groupPosition, childPosition, addCarList);
 
         } else if (groupPosition != -1 && childPosition != -1) {
 
-            mDataList.add(mGroupAdapter.getItemInDataListPosition(groupPosition, childPosition), createCar());
-            mGroupAdapter.notifyDataInserted(groupPosition, childPosition);
+            Car car = createCar();
+            mDataList.add(mGroupAdapter.getItemInDataListPosition(groupPosition, childPosition), car);
+            mGroupAdapter.notifyDataInserted(groupPosition, childPosition, car);
 
         }
 
-        mGroupAdapter.notifyDataChanged();
+        mGroupAdapter.notifyDataChanged(mDataList);
 
     }
 
@@ -268,7 +272,7 @@ public class GroupListActivity extends AppCompatActivity {
 
         }
 
-        mGroupAdapter.notifyDataChanged();
+        mGroupAdapter.notifyDataChanged(mDataList);
 
     }
 
@@ -284,29 +288,33 @@ public class GroupListActivity extends AppCompatActivity {
 
         if (position != -1 && itemCount != -1) {
 
+            List<Car> updateCarList = new ArrayList<>();
             for (int i = 0; i < itemCount; i++) {
                 Car car = mDataList.get(position + i);
                 car.setTypeName(getCarType());
                 mDataList.set(position + i, car);
+                updateCarList.add(car);
             }
-            mGroupAdapter.notifyDataRangeChanged(position, itemCount);
+            mGroupAdapter.notifyDataRangeChanged(position, updateCarList);
 
         } else if (position != -1) {
 
             Car car = mDataList.get(position);
             car.setTypeName(getCarType());
             mDataList.set(position, car);
-            mGroupAdapter.notifyDataChanged(position);
+            mGroupAdapter.notifyDataChanged(position, car);
 
         } else if (groupPosition != -1 && childPosition != -1 && itemCount != -1) {
 
             position = mGroupAdapter.getItemInDataListPosition(groupPosition, childPosition);
+            List<Car> updateCarList = new ArrayList<>();
             for (int i = 0; i < itemCount; i++) {
                 Car car = mDataList.get(position + i);
                 car.setTypeName(getCarType());
                 mDataList.set(position + i, car);
+                updateCarList.add(car);
             }
-            mGroupAdapter.notifyDataRangeChanged(groupPosition, childPosition, itemCount);
+            mGroupAdapter.notifyDataRangeChanged(groupPosition, childPosition, updateCarList);
 
         } else if (groupPosition != -1 && childPosition != -1) {
 
@@ -318,7 +326,7 @@ public class GroupListActivity extends AppCompatActivity {
 
         }
 
-        mGroupAdapter.notifyDataChanged();
+        mGroupAdapter.notifyDataChanged(mDataList);
 
     }
 
@@ -361,7 +369,7 @@ public class GroupListActivity extends AppCompatActivity {
             }
             mGroupAdapter.notifyDataMoved(from, to);
         }
-        mGroupAdapter.notifyDataChanged();
+        mGroupAdapter.notifyDataChanged(mDataList);
     }
 
     /**

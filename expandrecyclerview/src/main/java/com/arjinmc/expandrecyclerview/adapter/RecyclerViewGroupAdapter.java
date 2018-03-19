@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * RecyclerView GroupAdapter
@@ -24,7 +24,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     private Context mContext;
     private RecyclerView mParent;
     private List<T> mDataList;
-    private Map<Integer, Integer> mTypeLayoutIds;
+    private ArrayMap<Integer, Integer> mTypeLayoutIds;
     private RecyclerViewGroupTypeProcessor<T> mGroupTypeProcessor;
     /**
      * default groupViewType is 0 if not set
@@ -34,11 +34,11 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     /**
      * map for per group position
      */
-    private Map<Integer, Integer> mGroupPositionMap;
+    private ArrayMap<Integer, Integer> mGroupPositionMap;
     /**
      * map for per group item count
      */
-    private Map<Integer, Integer> mGroupItemCountMap;
+    private ArrayMap<Integer, Integer> mGroupItemCountMap;
     /**
      * the count of groups
      */
@@ -46,11 +46,11 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     /**
      * cache map for child's group position
      */
-    private Map<Integer, Integer> mChildGroupPositionCacheMap;
+    private ArrayMap<Integer, Integer> mChildGroupPositionCacheMap;
     /**
      * cache map for child's position in its group
      */
-    private Map<Integer, Integer> mChildItemPositionCacheMap;
+    private ArrayMap<Integer, Integer> mChildItemPositionCacheMap;
 
 
     public RecyclerViewGroupAdapter(Context context, List<T> dataList
@@ -62,7 +62,10 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             , @LayoutRes int[] typeLayoutIds, Integer groupType, RecyclerViewGroupTypeProcessor<T> groupTypeProcessor) {
         mContext = context;
         if (groupType != null && groupType >= 0) mGroupViewType = groupType;
-        mDataList = dataList;
+        mDataList = new ArrayList<>();
+        if (dataList != null && !dataList.isEmpty()) {
+            mDataList.addAll(dataList);
+        }
         if (typeLayoutIds != null && typeLayoutIds.length != 0) {
             mTypeLayoutIds = new ArrayMap<>();
             int typeSize = typeLayoutIds.length;
@@ -118,14 +121,26 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     /**
      * notifiy data set change
      */
-    public void notifyDataChanged() {
+    public void notifyDataChanged(List<T> dataList) {
 
+        mDataList.clear();
+        if (dataList != null && !dataList.isEmpty()) {
+            mDataList.addAll(dataList);
+        }
         notifyDataSetChanged();
 
-        mGroupPositionMap.clear();
-        mGroupItemCountMap.clear();
-        mChildGroupPositionCacheMap.clear();
-        mChildItemPositionCacheMap.clear();
+        if (mGroupPositionMap != null) {
+            mGroupPositionMap.clear();
+        }
+        if (mGroupItemCountMap != null) {
+            mGroupItemCountMap.clear();
+        }
+        if (mChildGroupPositionCacheMap != null) {
+            mChildGroupPositionCacheMap.clear();
+        }
+        if (mChildItemPositionCacheMap != null) {
+            mChildItemPositionCacheMap.clear();
+        }
 
         mGroupPositionMap = null;
         mGroupItemCountMap = null;
@@ -136,11 +151,12 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
     /**
      * get the item count of one group with groupPosition
+     *
      * @param groupPosition
      * @return
      */
-    public int getGroupItemCount(int groupPosition){
-        if(mGroupItemCountMap==null)
+    public int getGroupItemCount(int groupPosition) {
+        if (mGroupItemCountMap == null)
             return -1;
         else
             return mGroupItemCountMap.get(groupPosition);
@@ -148,11 +164,12 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
     /**
      * get the position in data list with groupPosition
+     *
      * @param groupPosition
      * @return
      */
-    public int getItemInDataListPosition(int groupPosition){
-        if(mGroupPositionMap==null)
+    public int getItemInDataListPosition(int groupPosition) {
+        if (mGroupPositionMap == null)
             return -1;
         return mGroupPositionMap.get(groupPosition);
     }
@@ -165,61 +182,151 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @return
      */
     public int getItemInDataListPosition(int groupPosition, int childPosition) {
-        if (mGroupPositionMap == null)
+        if (mGroupPositionMap == null) {
             return -1;
+        }
+        if (mGroupItemCountMap.get(groupPosition) == null) {
+            return -1;
+        }
+        if (childPosition < 0 || childPosition >= getGroupItemCount(groupPosition)) {
+            return -1;
+        }
         return mGroupPositionMap.get(groupPosition) + 1 + childPosition;
     }
 
     /**
-     * overwrite notifyItemChanged
+     * Check the position is not in the range of data
      *
      * @param position
+     * @return
      */
-    public void notifyDataChanged(int position) {
+    private boolean isBeyondDataSize(int position) {
+        if (position < 0 || position >= mDataList.size()) {
+            throw new IllegalArgumentException("The position is out of the range of data set");
+        }
+        return false;
+    }
+
+    /**
+     * over write notifyItemChanged
+     *
+     * @param position
+     * @param data
+     */
+    public void notifyDataChanged(int position, T data) {
+
+        if (isBeyondDataSize(position) || data == null) {
+            return;
+        }
+
+        mDataList.set(position, data);
         notifyItemChanged(position);
     }
 
     /**
-     * overwrite notifyItemChanged
+     * over write notifyItemChanged
      *
      * @param groupPosition
      * @param childPosition
+     * @param data
      */
-    public void notifyDataChanged(int groupPosition, int childPosition) {
+    public void notifyDataChanged(int groupPosition, int childPosition, T data) {
+
+        if (data == null) {
+            return;
+        }
+
+        if (groupPosition < 0 || groupPosition >= mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (childPosition < 0 || childPosition >= mGroupItemCountMap.get(groupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+
+        mDataList.set(getItemInDataListPosition(groupPosition, childPosition), data);
         notifyItemChanged(getItemInDataListPosition(groupPosition, childPosition));
     }
 
     /**
-     * overwrite notifyDataRangeInserted
+     * over write notifyDataRangeInserted
      *
      * @param position
+     * @param data
      */
-    public void notifyDataInserted(int position) {
-        notifyDataRangeInserted(position, 1);
+    public void notifyDataInserted(int position, T data) {
+
+        if (data == null) {
+            return;
+        }
+        if (position < 0 || position >= mDataList.size()) {
+            throw new IllegalArgumentException("The position is out of the range of data set");
+        }
+
+        List<T> dataList = new ArrayList<>(1);
+        dataList.add(data);
+        notifyDataRangeInserted(position, dataList);
+        initGroup();
     }
 
     /**
-     * overwrite notifyDataRangeInserted
+     * over write notifyDataRangeInserted
      *
      * @param groupPosition
      * @param childPosition
+     * @param data
      */
-    public void notifyDataInserted(int groupPosition, int childPosition) {
-        notifyDataRangeInserted(getItemInDataListPosition(groupPosition, childPosition), 1);
+    public void notifyDataInserted(int groupPosition, int childPosition, T data) {
+
+        if (data == null) {
+            return;
+        }
+
+        if (groupPosition < 0 || groupPosition >= mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (childPosition < 0 || childPosition > mGroupItemCountMap.get(groupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+
+        List<T> dataList = new ArrayList<>(1);
+        dataList.add(data);
+        notifyDataRangeInserted(getItemInDataListPosition(groupPosition, childPosition), dataList);
+        initGroup();
+
     }
 
     /**
-     * overwrite notifyItemMoved
+     * over write notifyItemMoved
      *
      * @param fromPosition
      * @param toPosition
      */
     public void notifyDataMoved(int fromPosition, int toPosition) {
+
+        if (isBeyondDataSize(fromPosition) || isBeyondDataSize(toPosition)) {
+            throw new IllegalArgumentException("The position is out of the range of data set");
+        }
+        if (fromPosition == toPosition) {
+            return;
+        }
+        T data = mDataList.get(fromPosition);
+        if (fromPosition > toPosition) {
+            mDataList.remove(fromPosition);
+            mDataList.add(toPosition, data);
+        } else {
+            mDataList.add(toPosition, data);
+            mDataList.remove(fromPosition);
+        }
+
         notifyItemMoved(fromPosition, toPosition);
+        initGroup();
+
     }
 
     /**
-     * overwrite notifyItemMoved
+     * over write notifyItemMoved
      *
      * @param fromGroupPosition
      * @param fromChildPosition
@@ -228,91 +335,223 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      */
     public void notifyDataMoved(int fromGroupPosition, int fromChildPosition
             , int toGroupPosition, int toChildPosition) {
+
+        if (fromGroupPosition < 0 || fromGroupPosition >= mGroupCount
+                || toGroupPosition < 0 || toGroupPosition >= mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (fromChildPosition < 0 || fromChildPosition >= mGroupItemCountMap.get(fromGroupPosition)
+                || toChildPosition < 0 || toChildPosition >= mGroupItemCountMap.get(toGroupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+
         int fromPosition = getItemInDataListPosition(fromGroupPosition, fromChildPosition);
         int toPosition = getItemInDataListPosition(toGroupPosition, toChildPosition);
+
+        if (isBeyondDataSize(fromPosition) || isBeyondDataSize(toPosition)) {
+            throw new IllegalArgumentException("The position is out of the range of data set");
+        }
+        if (fromPosition == toPosition) {
+            return;
+        }
+        T data = mDataList.get(fromPosition);
+        if (fromPosition > toPosition) {
+            mDataList.remove(fromPosition);
+            mDataList.add(toPosition, data);
+        } else {
+            mDataList.add(toPosition, data);
+            mDataList.remove(fromPosition);
+        }
+
         notifyItemMoved(fromPosition, toPosition);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeRemoved
+     * over write notifyItemRangeRemoved
      *
      * @param position
      */
     public void notifyDataRemoved(int position) {
+        if (isBeyondDataSize(position)) {
+            return;
+        }
+        mDataList.remove(position);
         notifyItemRangeRemoved(position, 1);
+        initGroup();
+
     }
 
     /**
-     * overwrite notifyItemRangeRemoved
+     * over write notifyItemRangeRemoved
      *
      * @param groupPosition
      * @param childPosition
      */
     public void notifyDataRemoved(int groupPosition, int childPosition) {
+
+        if (groupPosition < 0 || groupPosition > mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (childPosition < 0 || childPosition > mGroupItemCountMap.get(groupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+        mDataList.remove(getItemInDataListPosition(groupPosition, childPosition));
         notifyItemRangeRemoved(getItemInDataListPosition(groupPosition, childPosition), 1);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeChanged
+     * over write notifyItemRangeChanged
      *
      * @param startPosition
-     * @param itemCount
+     * @param dataList
      */
-    public void notifyDataRangeChanged(int startPosition, int itemCount) {
-        notifyItemRangeChanged(startPosition, itemCount);
+    public void notifyDataRangeChanged(int startPosition, List<T> dataList) {
+
+        if (dataList == null || dataList.isEmpty()) {
+            return;
+        }
+
+        int dataSize = dataList.size();
+
+        if (isBeyondDataSize(startPosition) || isBeyondDataSize(startPosition + dataSize)) {
+            return;
+        }
+
+        for (int i = 0; i < dataSize; i++) {
+            mDataList.set(startPosition + i, dataList.get(i));
+        }
+        notifyItemRangeChanged(startPosition, dataSize);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeChanged
+     * over write notifyItemRangeChanged
      *
      * @param startGroupPosition
      * @param startChildPosition
-     * @param itemCount
+     * @param dataList
      */
-    public void notifyDataRangeChanged(int startGroupPosition, int startChildPosition, int itemCount) {
-        notifyItemRangeChanged(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+    public void notifyDataRangeChanged(int startGroupPosition, int startChildPosition, List<T> dataList) {
+        if (dataList == null || dataList.isEmpty()) {
+            return;
+        }
+
+        int dataSize = dataList.size();
+
+        if (startGroupPosition < 0 || startGroupPosition >= mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (startChildPosition < 0 || startChildPosition >= mGroupItemCountMap.get(startGroupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+
+        for (int i = 0; i < dataSize; i++) {
+            mDataList.set(getItemInDataListPosition(startGroupPosition, startChildPosition) + i, dataList.get(i));
+        }
+
+        notifyItemRangeChanged(getItemInDataListPosition(startGroupPosition, startChildPosition), dataSize);
+        initGroup();
+
     }
 
     /**
-     * overwrite notifyItemRangeInserted
+     * over write notifyItemRangeInserted
      *
      * @param startPosition
-     * @param itemCount
+     * @param dataList
      */
-    public void notifyDataRangeInserted(int startPosition, int itemCount) {
-        notifyItemRangeInserted(startPosition, itemCount);
+    public void notifyDataRangeInserted(int startPosition, List<T> dataList) {
+
+        if (dataList == null || dataList.isEmpty()) {
+            return;
+        }
+
+        int dataSize = dataList.size();
+
+        if (isBeyondDataSize(startPosition) || isBeyondDataSize(startPosition + dataSize)) {
+            return;
+        }
+
+        for (int i = 0; i < dataSize; i++) {
+            mDataList.add(startPosition + i, dataList.get(i));
+        }
+
+        notifyItemRangeInserted(startPosition, dataSize);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeInserted
+     * over write notifyItemRangeInserted
      *
      * @param startGroupPosition
      * @param startChildPosition
-     * @param itemCount
+     * @param dataList
      */
-    public void notifyDataRangeInserted(int startGroupPosition, int startChildPosition, int itemCount) {
-        notifyItemRangeInserted(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+    public void notifyDataRangeInserted(int startGroupPosition, int startChildPosition, List<T> dataList) {
+
+        if (dataList == null || dataList.isEmpty()) {
+            return;
+        }
+
+        int dataSize = dataList.size();
+
+        if (startGroupPosition < 0 || startGroupPosition >= mGroupCount) {
+            throw new IllegalArgumentException("No this group position!");
+        }
+
+        if (startChildPosition < 0 || startChildPosition >= mGroupItemCountMap.get(startGroupPosition)) {
+            throw new IllegalArgumentException("No this child position in this group!");
+        }
+
+        for (int i = 0; i < dataSize; i++) {
+            mDataList.add(getItemInDataListPosition(startGroupPosition, startChildPosition) + i, dataList.get(i));
+        }
+        notifyItemRangeInserted(getItemInDataListPosition(startGroupPosition, startChildPosition), dataSize);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeRemoved
+     * over write notifyItemRangeRemoved
      *
      * @param startPosition
      * @param itemCount
      */
     public void notifyDataRangeRemoved(int startPosition, int itemCount) {
+
+        if (isBeyondDataSize(startPosition) || isBeyondDataSize(startPosition + itemCount - 1)) {
+            return;
+        }
+        for (int i = itemCount; i > 0; i--) {
+            mDataList.remove(startPosition + i);
+        }
         notifyItemRangeRemoved(startPosition, itemCount);
+        initGroup();
     }
 
     /**
-     * overwrite notifyItemRangeRemoved
+     * over write notifyItemRangeRemoved
      *
      * @param startGroupPosition
      * @param startChildPosition
      * @param itemCount
      */
     public void notifyDataRangeRemoved(int startGroupPosition, int startChildPosition, int itemCount) {
+        if (isBeyondDataSize(getItemInDataListPosition(startGroupPosition, startChildPosition))
+                || isBeyondDataSize(getItemInDataListPosition(startGroupPosition, startChildPosition + itemCount - 1))) {
+            return;
+        }
+
+        for (int i = itemCount; i > 0; i--) {
+            mDataList.remove(getItemInDataListPosition(startGroupPosition, startChildPosition) + i);
+        }
+
         notifyItemRangeRemoved(getItemInDataListPosition(startGroupPosition, startChildPosition), itemCount);
+        initGroup();
     }
 
     /**
@@ -346,13 +585,17 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                     lastGroupPosition = i;
 
                     if (mGroupCount != 0) {
-                        mGroupItemCountMap.put(mGroupCount - 1, i - mGroupPositionMap.get(mGroupCount - 1));
+                        mGroupItemCountMap.put(mGroupCount - 1, i - mGroupPositionMap.get(mGroupCount - 1) - 1);
                     }
                     mGroupCount++;
                 }
             }
             mGroupItemCountMap.put(mGroupCount - 1, dataSize - lastGroupPosition);
+
         }
+
+        mChildGroupPositionCacheMap = null;
+        mChildItemPositionCacheMap = null;
     }
 
     /**
@@ -366,10 +609,8 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         if (mGroupPositionMap == null || mGroupPositionMap.isEmpty())
             return -1;
         else {
-            for (Integer key : mGroupPositionMap.keySet()) {
-                if (mGroupPositionMap.get(key) == position) {
-                    return key;
-                }
+            if (mGroupPositionMap.get(position) != null) {
+                return position;
             }
             return -1;
         }

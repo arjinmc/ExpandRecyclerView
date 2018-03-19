@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
 
     private Context mContext;
     private List<T> mDataList;
-    private Map<Integer, Integer> mTypeLayoutIds;
+    private ArrayMap<Integer, Integer> mTypeLayoutIds;
     private RecyclerViewMultipleTypeProcessor<T> mMultipleTypeProcessor;
     private RecyclerViewSingleTypeProcessor<T> mSingleTypeProcessor;
 
@@ -108,7 +107,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param position
      * @return
      */
-    private boolean isBeyondDataRange(int position) {
+    private boolean isBeyondDataSize(int position) {
         if (position < 0 || position >= mDataList.size()) {
             throw new IllegalArgumentException("The position is out of the range of data set");
         }
@@ -135,7 +134,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param data
      */
     public void notifyDataItemChanged(int position, T data) {
-        if (isBeyondDataRange(position) || data == null) {
+        if (isBeyondDataSize(position) || data == null) {
             return;
         }
 
@@ -155,7 +154,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
             return;
         }
         int dataSize = dataList.size();
-        if (isBeyondDataRange(positionStart) || isBeyondDataRange(positionStart + dataSize)) {
+        if (isBeyondDataSize(positionStart) || isBeyondDataSize(positionStart + dataSize)) {
             return;
         }
 
@@ -210,7 +209,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param position
      */
     public void notifyDataItemRemoved(int position) {
-        if (isBeyondDataRange(position)) {
+        if (isBeyondDataSize(position)) {
             return;
         }
         mDataList.remove(position);
@@ -225,7 +224,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param itemCount
      */
     public void notifyDataItemRangeRemoved(int positionStart, int itemCount) {
-        if (isBeyondDataRange(positionStart) || isBeyondDataRange(positionStart + itemCount)) {
+        if (isBeyondDataSize(positionStart) || isBeyondDataSize(positionStart + itemCount)) {
             throw new IllegalArgumentException("The position is out of the range of data set");
         }
         for (int i = itemCount; i > 0; i--) {
@@ -241,7 +240,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param toPosition
      */
     public void notifyDataItemMoved(int fromPosition, int toPosition) {
-        if (isBeyondDataRange(fromPosition) || isBeyondDataRange(toPosition)) {
+        if (isBeyondDataSize(fromPosition) || isBeyondDataSize(toPosition)) {
             throw new IllegalArgumentException("The position is out of the range of data set");
         }
         if (fromPosition == toPosition) {
