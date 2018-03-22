@@ -17,15 +17,15 @@ import java.util.List;
  * email: arjinmc@hotmail.com
  */
 
-public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerViewViewHolder> {
+public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerViewViewHolder> {
 
     private final String TAG = "RVGroupAdapter";
 
     private Context mContext;
     private RecyclerView mParent;
-    private List<T> mDataList;
+    private List<E> mDataList;
     private ArrayMap<Integer, Integer> mTypeLayoutIds;
-    private RecyclerViewGroupTypeProcessor<T> mGroupTypeProcessor;
+    private RecyclerViewGroupTypeProcessor<E> mGroupTypeProcessor;
     /**
      * default groupViewType is 0 if not set
      */
@@ -53,13 +53,13 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     private ArrayMap<Integer, Integer> mChildItemPositionCacheMap;
 
 
-    public RecyclerViewGroupAdapter(Context context, List<T> dataList
-            , @LayoutRes int[] typeLayoutIds, RecyclerViewGroupTypeProcessor<T> groupTypeProcessor) {
+    public RecyclerViewGroupAdapter(Context context, List<E> dataList
+            , @LayoutRes int[] typeLayoutIds, RecyclerViewGroupTypeProcessor<E> groupTypeProcessor) {
         this(context, dataList, typeLayoutIds, null, groupTypeProcessor);
     }
 
-    public RecyclerViewGroupAdapter(Context context, List<T> dataList
-            , @LayoutRes int[] typeLayoutIds, Integer groupType, RecyclerViewGroupTypeProcessor<T> groupTypeProcessor) {
+    public RecyclerViewGroupAdapter(Context context, List<E> dataList
+            , @LayoutRes int[] typeLayoutIds, Integer groupType, RecyclerViewGroupTypeProcessor<E> groupTypeProcessor) {
         mContext = context;
         if (groupType != null && groupType >= 0) mGroupViewType = groupType;
         mDataList = new ArrayList<>();
@@ -121,7 +121,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     /**
      * notifiy data set change
      */
-    public void notifyDataChanged(List<T> dataList) {
+    public void notifyDataChanged(List<E> dataList) {
 
         mDataList.clear();
         if (dataList != null && !dataList.isEmpty()) {
@@ -213,7 +213,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param position
      * @param data
      */
-    public void notifyDataChanged(int position, T data) {
+    public void notifyDataChanged(int position, E data) {
 
         if (isBeyondDataSize(position) || data == null) {
             return;
@@ -230,7 +230,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param childPosition
      * @param data
      */
-    public void notifyDataChanged(int groupPosition, int childPosition, T data) {
+    public void notifyDataChanged(int groupPosition, int childPosition, E data) {
 
         if (data == null) {
             return;
@@ -254,7 +254,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param position
      * @param data
      */
-    public void notifyDataInserted(int position, T data) {
+    public void notifyDataInserted(int position, E data) {
 
         if (data == null) {
             return;
@@ -263,7 +263,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             throw new IllegalArgumentException("The position is out of the range of data set");
         }
 
-        List<T> dataList = new ArrayList<>(1);
+        List<E> dataList = new ArrayList<>(1);
         dataList.add(data);
         notifyDataRangeInserted(position, dataList);
         initGroup();
@@ -276,7 +276,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param childPosition
      * @param data
      */
-    public void notifyDataInserted(int groupPosition, int childPosition, T data) {
+    public void notifyDataInserted(int groupPosition, int childPosition, E data) {
 
         if (data == null) {
             return;
@@ -290,7 +290,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             throw new IllegalArgumentException("No this child position in this group!");
         }
 
-        List<T> dataList = new ArrayList<>(1);
+        List<E> dataList = new ArrayList<>(1);
         dataList.add(data);
         notifyDataRangeInserted(getItemInDataListPosition(groupPosition, childPosition), dataList);
         initGroup();
@@ -311,7 +311,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         if (fromPosition == toPosition) {
             return;
         }
-        T data = mDataList.get(fromPosition);
+        E data = mDataList.get(fromPosition);
         if (fromPosition > toPosition) {
             mDataList.remove(fromPosition);
             mDataList.add(toPosition, data);
@@ -355,7 +355,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         if (fromPosition == toPosition) {
             return;
         }
-        T data = mDataList.get(fromPosition);
+        E data = mDataList.get(fromPosition);
         if (fromPosition > toPosition) {
             mDataList.remove(fromPosition);
             mDataList.add(toPosition, data);
@@ -409,7 +409,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param startPosition
      * @param dataList
      */
-    public void notifyDataRangeChanged(int startPosition, List<T> dataList) {
+    public void notifyDataRangeChanged(int startPosition, List<E> dataList) {
 
         if (dataList == null || dataList.isEmpty()) {
             return;
@@ -435,7 +435,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param startChildPosition
      * @param dataList
      */
-    public void notifyDataRangeChanged(int startGroupPosition, int startChildPosition, List<T> dataList) {
+    public void notifyDataRangeChanged(int startGroupPosition, int startChildPosition, List<E> dataList) {
         if (dataList == null || dataList.isEmpty()) {
             return;
         }
@@ -465,7 +465,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param startPosition
      * @param dataList
      */
-    public void notifyDataRangeInserted(int startPosition, List<T> dataList) {
+    public void notifyDataRangeInserted(int startPosition, List<E> dataList) {
 
         if (dataList == null || dataList.isEmpty()) {
             return;
@@ -492,7 +492,7 @@ public class RecyclerViewGroupAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      * @param startChildPosition
      * @param dataList
      */
-    public void notifyDataRangeInserted(int startGroupPosition, int startChildPosition, List<T> dataList) {
+    public void notifyDataRangeInserted(int startGroupPosition, int startChildPosition, List<E> dataList) {
 
         if (dataList == null || dataList.isEmpty()) {
             return;

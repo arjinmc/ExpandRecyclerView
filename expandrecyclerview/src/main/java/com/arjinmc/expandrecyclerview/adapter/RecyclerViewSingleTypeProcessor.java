@@ -6,7 +6,7 @@ package com.arjinmc.expandrecyclerview.adapter;
  * email: arjinmc@hotmail.com
  */
 
-public abstract class RecyclerViewSingleTypeProcessor<T> {
+public abstract class RecyclerViewSingleTypeProcessor<E> {
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder
@@ -15,6 +15,6 @@ public abstract class RecyclerViewSingleTypeProcessor<T> {
      * @param position the position of the item
      * @param object   the object of data list
      */
-    public abstract void onBindViewHolder(RecyclerViewViewHolder holder, int position, T object);
+    public abstract void onBindViewHolder(RecyclerViewViewHolder holder, int position, E object);
 
 }

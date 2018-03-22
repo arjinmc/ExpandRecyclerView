@@ -7,7 +7,7 @@ package com.arjinmc.expandrecyclerview.adapter;
  * email: arjinmc@hotmail.com
  */
 
-public abstract class RecyclerViewGroupTypeProcessor<T> {
+public abstract class RecyclerViewGroupTypeProcessor<E> {
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder for group type
@@ -16,7 +16,7 @@ public abstract class RecyclerViewGroupTypeProcessor<T> {
      * @param groupPosition the position of the group
      * @param object        the object of data list
      */
-    public abstract void onBindGroupViewHolder(RecyclerViewViewHolder holder, int groupPosition, T object);
+    public abstract void onBindGroupViewHolder(RecyclerViewViewHolder holder, int groupPosition, E object);
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder for item type
@@ -26,7 +26,7 @@ public abstract class RecyclerViewGroupTypeProcessor<T> {
      * @param itemPosition  the item position of the group
      * @param object        the object of data list
      */
-    public abstract void onBindItemViewHolder(RecyclerViewViewHolder holder, int groupPosition, int itemPosition, T object);
+    public abstract void onBindItemViewHolder(RecyclerViewViewHolder holder, int groupPosition, int itemPosition, E object);
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} getItemViewType

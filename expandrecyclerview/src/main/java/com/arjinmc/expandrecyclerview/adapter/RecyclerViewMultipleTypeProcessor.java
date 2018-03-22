@@ -7,7 +7,7 @@ package com.arjinmc.expandrecyclerview.adapter;
  * email: arjinmc@hotmail.com
  */
 
-public abstract class RecyclerViewMultipleTypeProcessor<T> {
+public abstract class RecyclerViewMultipleTypeProcessor<E> {
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder
@@ -16,7 +16,7 @@ public abstract class RecyclerViewMultipleTypeProcessor<T> {
      * @param position the position of the item
      * @param object   the object of data list
      */
-    public abstract void onBindViewHolder(RecyclerViewViewHolder holder, int position, T object);
+    public abstract void onBindViewHolder(RecyclerViewViewHolder holder, int position, E object);
 
     /**
      * Callback {@link android.support.v7.widget.RecyclerView.Adapter} getItemViewType

@@ -21,18 +21,18 @@ import java.util.List;
  * email: arjinmc@hotmail.com
  */
 
-public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewViewHolder> {
+public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewViewHolder> {
 
     private final String TAG = "RecyclerViewAdapter";
 
     private Context mContext;
-    private List<T> mDataList;
+    private List<E> mDataList;
     private ArrayMap<Integer, Integer> mTypeLayoutIds;
-    private RecyclerViewMultipleTypeProcessor<T> mMultipleTypeProcessor;
-    private RecyclerViewSingleTypeProcessor<T> mSingleTypeProcessor;
+    private RecyclerViewMultipleTypeProcessor<E> mMultipleTypeProcessor;
+    private RecyclerViewSingleTypeProcessor<E> mSingleTypeProcessor;
 
-    public RecyclerViewAdapter(Context context, List<T> dataList
-            , @LayoutRes int[] typeLayoutIds, RecyclerViewMultipleTypeProcessor<T> multipleTypeProcessor) {
+    public RecyclerViewAdapter(Context context, List<E> dataList
+            , @LayoutRes int[] typeLayoutIds, RecyclerViewMultipleTypeProcessor<E> multipleTypeProcessor) {
         mContext = context;
         mDataList = new ArrayList<>();
         if (dataList != null) {
@@ -48,7 +48,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
         mMultipleTypeProcessor = multipleTypeProcessor;
     }
 
-    public RecyclerViewAdapter(Context context, List<T> dataList
+    public RecyclerViewAdapter(Context context, List<E> dataList
             , @LayoutRes int layoutId, RecyclerViewSingleTypeProcessor singleTypeProcessor) {
         mContext = context;
         mDataList = new ArrayList<>();
@@ -119,7 +119,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      *
      * @param dataList
      */
-    public void notifyDataChanged(List<T> dataList) {
+    public void notifyDataChanged(List<E> dataList) {
         mDataList.clear();
         if (dataList != null) {
             mDataList.addAll(dataList);
@@ -133,7 +133,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param position
      * @param data
      */
-    public void notifyDataItemChanged(int position, T data) {
+    public void notifyDataItemChanged(int position, E data) {
         if (isBeyondDataSize(position) || data == null) {
             return;
         }
@@ -149,7 +149,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param positionStart
      * @param dataList
      */
-    public void notifyDataItemRangeChanged(int positionStart, List<T> dataList) {
+    public void notifyDataItemRangeChanged(int positionStart, List<E> dataList) {
         if (dataList == null || dataList.isEmpty()) {
             return;
         }
@@ -170,7 +170,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param position
      * @param data
      */
-    public void notifyDataItemInserted(int position, T data) {
+    public void notifyDataItemInserted(int position, E data) {
         if (position < 0 || position > mDataList.size()) {
             throw new IllegalArgumentException("The position is out of the range of data set");
         }
@@ -187,7 +187,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
      * @param positionStart
      * @param dataList
      */
-    public void notifyDataItemRangeInserted(int positionStart, List<T> dataList) {
+    public void notifyDataItemRangeInserted(int positionStart, List<E> dataList) {
 
         if (positionStart < 0 || positionStart > mDataList.size()) {
             throw new IllegalArgumentException("The position is out of the range of data set");
@@ -246,7 +246,7 @@ public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewVie
         if (fromPosition == toPosition) {
             return;
         }
-        T data = mDataList.get(fromPosition);
+        E data = mDataList.get(fromPosition);
         if (fromPosition > toPosition) {
             mDataList.remove(fromPosition);
             mDataList.add(toPosition, data);
