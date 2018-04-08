@@ -15,7 +15,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
-import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
+//import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class GroupStickyActivity extends AppCompatActivity {
                 .color(Color.GRAY)
                 .thickness(3)
                 .create());
-        rvList.addItemDecoration(new RecyclerViewStickyHeadItemDecoration.Builder().isSmooth(true).create());
+//        rvList.addItemDecoration(new RecyclerViewStickyHeadItemDecoration.Builder().isSmooth(true).create());
         mDataList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Car car = new Car();
