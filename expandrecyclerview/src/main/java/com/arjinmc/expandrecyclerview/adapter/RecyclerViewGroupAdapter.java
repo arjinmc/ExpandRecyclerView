@@ -97,11 +97,11 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerViewViewHolder holder, int position) {
 
         if (getItemViewType(position) == mGroupViewType) {
-            mGroupTypeProcessor.onBindGroupViewHolder(holder, findGroupPosition(position), mDataList.get(position));
+            mGroupTypeProcessor.onBindGroupViewHolder(holder, getGroupPosition(position), mDataList.get(position));
         } else {
-            int groupPosition = findChildGroupPosition(position);
+            int groupPosition = getGroupPosition(position);
             mGroupTypeProcessor.onBindItemViewHolder(holder, groupPosition
-                    , findChildPosition(groupPosition, position), mDataList.get(position));
+                    , getChildPositionInGroup(groupPosition, position), mDataList.get(position));
         }
     }
 
@@ -601,77 +601,6 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
     }
 
     /**
-     * find out the group position for group list
-     *
-     * @param position adapter item position
-     * @return
-     */
-    private int findGroupPosition(int position) {
-
-        if (mGroupPositionMap == null || mGroupPositionMap.isEmpty())
-            return -1;
-        else {
-            if (mGroupPositionMap.get(position) != null) {
-                return position;
-            }
-            return -1;
-        }
-    }
-
-    /**
-     * find out the child position of its group
-     *
-     * @param position adapter item position
-     * @return
-     */
-    private int findChildGroupPosition(int position) {
-
-        if (mChildGroupPositionCacheMap == null)
-            mChildGroupPositionCacheMap = new ArrayMap<>();
-        if (mDataList == null || mDataList.isEmpty()) return -1;
-        int tempPosition = mDataList.size();
-        int groupPosition = 0;
-
-        if (mChildGroupPositionCacheMap.containsKey(position))
-            return mChildGroupPositionCacheMap.get(position);
-        for (int i = mGroupCount; i > 0; i--) {
-            if (tempPosition <= position) {
-                groupPosition = i;
-                mChildGroupPositionCacheMap.put(position, groupPosition);
-                break;
-            }
-
-            tempPosition -= mGroupItemCountMap.get(i - 1);
-        }
-        return groupPosition;
-    }
-
-    /**
-     * find out the child position of its group
-     *
-     * @param groupPosition the group position of the group list
-     * @param position      adapter item position
-     * @return
-     */
-    private int findChildPosition(int groupPosition, int position) {
-
-        if (mChildItemPositionCacheMap == null)
-            mChildItemPositionCacheMap = new ArrayMap<>();
-        if (mDataList == null || mDataList.isEmpty()) return -1;
-        int positionInGroup = 0;
-        if (mChildItemPositionCacheMap.containsKey(position))
-            return mChildItemPositionCacheMap.get(position);
-
-        int groupItemCount = mGroupItemCountMap.get(groupPosition);
-        int groupRealPosition = mGroupPositionMap.get(groupPosition);
-        positionInGroup = (position - groupRealPosition) % groupItemCount - 1;
-        mChildItemPositionCacheMap.put(position, positionInGroup);
-
-        return positionInGroup;
-
-    }
-
-    /**
      * get the group position with layout position in the list
      *
      * @param position
@@ -695,6 +624,32 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 
         return -1;
     }
+
+    /**
+     * find out the child position of its group
+     *
+     * @param groupPosition the group position of the group list
+     * @param position      adapter item position
+     * @return
+     */
+    private int getChildPositionInGroup(int groupPosition, int position) {
+
+        if (mChildItemPositionCacheMap == null)
+            mChildItemPositionCacheMap = new ArrayMap<>();
+        if (mDataList == null || mDataList.isEmpty()) return -1;
+        int positionInGroup = 0;
+        if (mChildItemPositionCacheMap.containsKey(position))
+            return mChildItemPositionCacheMap.get(position);
+
+        int groupItemCount = mGroupItemCountMap.get(groupPosition);
+        int groupRealPosition = mGroupPositionMap.get(groupPosition);
+        positionInGroup = (position - groupRealPosition - 1) % groupItemCount;
+        mChildItemPositionCacheMap.put(position, positionInGroup);
+
+        return positionInGroup;
+
+    }
+
 
     /**
      * check if is last item in it's Group
