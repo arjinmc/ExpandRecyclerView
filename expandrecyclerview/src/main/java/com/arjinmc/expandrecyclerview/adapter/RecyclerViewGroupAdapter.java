@@ -108,7 +108,7 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 
         if (mOnItemClickListener != null) {
             final int lPosition = position;
-            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (getItemViewType(lPosition) == mGroupViewType) {

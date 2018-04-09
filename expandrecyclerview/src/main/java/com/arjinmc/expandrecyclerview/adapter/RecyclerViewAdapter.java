@@ -87,7 +87,7 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
 
         if (mOnItemClickListener != null) {
             final int lPosition = position;
-            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mOnItemClickListener.onClick(lPosition);
