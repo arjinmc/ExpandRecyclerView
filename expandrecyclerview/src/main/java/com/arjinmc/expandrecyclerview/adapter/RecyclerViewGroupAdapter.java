@@ -6,6 +6,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
     private List<E> mDataList;
     private ArrayMap<Integer, Integer> mTypeLayoutIds;
     private RecyclerViewGroupTypeProcessor<E> mGroupTypeProcessor;
+    private OnItemClickListener mOnItemClickListener;
     /**
      * default groupViewType is 0 if not set
      */
@@ -103,6 +105,22 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
             mGroupTypeProcessor.onBindItemViewHolder(holder, groupPosition
                     , getChildPositionInGroup(groupPosition, position), mDataList.get(position));
         }
+
+        if (mOnItemClickListener != null) {
+            final int lPosition = position;
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getItemViewType(lPosition) == mGroupViewType) {
+                        mOnItemClickListener.onClick(lPosition, getGroupPosition(lPosition), -1);
+                    } else {
+                        int groupPosition = getGroupPosition(lPosition);
+                        mOnItemClickListener.onClick(lPosition, groupPosition, getChildPositionInGroup(groupPosition, lPosition));
+                    }
+                }
+            });
+        }
+
     }
 
     @Override
@@ -116,6 +134,10 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
             return 0;
         else
             return mDataList.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     /**
@@ -712,6 +734,13 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 //        }
 //    }
 
+    /**
+     * OnItemClickListener
+     */
+    public interface OnItemClickListener {
+
+        void onClick(int position, int groupPosition, int childPosition);
+    }
 }
 
 

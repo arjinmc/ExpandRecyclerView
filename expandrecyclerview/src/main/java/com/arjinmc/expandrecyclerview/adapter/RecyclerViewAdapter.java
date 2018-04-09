@@ -5,6 +5,7 @@ import android.support.annotation.LayoutRes;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
     private ArrayMap<Integer, Integer> mTypeLayoutIds;
     private RecyclerViewMultipleTypeProcessor<E> mMultipleTypeProcessor;
     private RecyclerViewSingleTypeProcessor<E> mSingleTypeProcessor;
+    private OnItemClickListener mOnItemClickListener;
 
     public RecyclerViewAdapter(Context context, List<E> dataList
             , @LayoutRes int[] typeLayoutIds, RecyclerViewMultipleTypeProcessor<E> multipleTypeProcessor) {
@@ -83,6 +85,15 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
         else if (mSingleTypeProcessor != null)
             mSingleTypeProcessor.onBindViewHolder(holder, position, mDataList.get(position));
 
+        if (mOnItemClickListener != null) {
+            final int lPosition = position;
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListener.onClick(lPosition);
+                }
+            });
+        }
     }
 
     @Override
@@ -99,6 +110,10 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
             return 0;
         else
             return mDataList.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     /**
@@ -258,4 +273,11 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
         notifyItemMoved(fromPosition, toPosition);
     }
 
+    /**
+     * OnItemClickListener
+     */
+    public interface OnItemClickListener {
+
+        void onClick(int position);
+    }
 }

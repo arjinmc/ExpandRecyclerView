@@ -2,10 +2,9 @@ package com.arjinmc.recyclerviewexpandsample;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,22 +30,29 @@ public class MainActivity extends AppCompatActivity {
                 .create());
         RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
         String[] titles = getResources().getStringArray(R.array.best_pratices);
-        rvList.setAdapter(new RecyclerViewAdapter<>(this, Arrays.asList(titles)
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter<>(this, Arrays.asList(titles)
                 , R.layout.item_main_list
                 , new RecyclerViewSingleTypeProcessor<String>() {
             @Override
             public void onBindViewHolder(RecyclerViewViewHolder holder, final int position, String str) {
                 TextView textView = holder.getView(R.id.tv_content);
                 textView.setText(str);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        clickPosition(position);
-                    }
-                });
+//                textView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        clickPosition(position);
+//                    }
+//                });
             }
 
-        }));
+        });
+        rvList.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                clickPosition(position);
+            }
+        });
 
     }
 

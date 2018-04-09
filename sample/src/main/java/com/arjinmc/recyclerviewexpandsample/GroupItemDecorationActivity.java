@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,30 +65,12 @@ public class GroupItemDecorationActivity extends AppCompatActivity {
             public void onBindGroupViewHolder(RecyclerViewViewHolder holder, final int groupPosition, Car car) {
                 TextView tvGroup = holder.getView(R.id.tv_group);
                 tvGroup.setText(car.getGroup());
-
-                tvGroup.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.e("group click", "Group: " + groupPosition);
-                        Toast.makeText(GroupItemDecorationActivity.this
-                                , "Group: " + groupPosition, Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
 
             @Override
             public void onBindItemViewHolder(RecyclerViewViewHolder holder, final int groupPosition, final int itemPosition, Car car) {
                 TextView tvContent = holder.getView(R.id.tv_content);
                 tvContent.setText("Car brand:" + car.getBrand() + " / type: " + car.getTypeName());
-
-                tvContent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.e("item click", "Group: " + groupPosition + "\titemPosition: " + itemPosition);
-                        Toast.makeText(GroupItemDecorationActivity.this
-                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition, Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
 
             @Override
@@ -101,5 +82,13 @@ public class GroupItemDecorationActivity extends AppCompatActivity {
         });
 
         rvList.setAdapter(mGroupAdapter);
+        mGroupAdapter.setOnItemClickListener(new RecyclerViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position, int groupPosition, int childPosition) {
+                Log.e("item click", "Group: " + groupPosition + "\titemPosition: " + childPosition);
+                Toast.makeText(GroupItemDecorationActivity.this
+                        , "Group: " + groupPosition + "\titemPosition: " + childPosition, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -14,9 +14,11 @@ import android.view.View;
 public class RecyclerViewViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> mViews;
+    private View mItemView;
 
     public RecyclerViewViewHolder(View itemView) {
         super(itemView);
+        mItemView = itemView;
         mViews = new SparseArray<>();
     }
 
@@ -34,6 +36,10 @@ public class RecyclerViewViewHolder extends RecyclerView.ViewHolder {
             mViews.put(viewId, view);
         }
         return (T) view;
+    }
+
+    public View getItemView() {
+        return mItemView;
     }
 
 }
