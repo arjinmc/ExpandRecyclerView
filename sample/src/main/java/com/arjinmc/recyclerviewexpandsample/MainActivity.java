@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 jumpToActivity(GroupStickyActivity.class);
                 break;
+            case 5:
+                jumpToActivity(GroupItemDecorationActivity.class);
         }
     }
 

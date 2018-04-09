@@ -156,10 +156,12 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
      * @return
      */
     public int getGroupItemCount(int groupPosition) {
-        if (mGroupItemCountMap == null)
+        if (mGroupItemCountMap == null || mGroupItemCountMap.isEmpty()
+                || mGroupItemCountMap.get(groupPosition) == null) {
             return -1;
-        else
+        } else {
             return mGroupItemCountMap.get(groupPosition);
+        }
     }
 
     /**
@@ -590,7 +592,7 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
                     mGroupCount++;
                 }
             }
-            mGroupItemCountMap.put(mGroupCount - 1, dataSize - lastGroupPosition);
+            mGroupItemCountMap.put(mGroupCount - 1, dataSize - 1 - lastGroupPosition);
 
         }
 
@@ -667,6 +669,53 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 
         return positionInGroup;
 
+    }
+
+    /**
+     * get the group position with layout position in the list
+     *
+     * @param position
+     * @return
+     */
+    public int getGroupPosition(int position) {
+        if (mGroupPositionMap == null || mGroupPositionMap.isEmpty()
+                || mGroupItemCountMap == null || mGroupItemCountMap.isEmpty()) {
+            return -1;
+        }
+
+        int keySize = mGroupPositionMap.size();
+        for (int i = 0; i < keySize; i++) {
+
+            if (position == 0) {
+                return 0;
+            } else if (mGroupPositionMap.get(mGroupPositionMap.keyAt(keySize - 1 - i)) <= position) {
+                return keySize - 1 - i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * check if is last item in it's Group
+     *
+     * @param position
+     * @return
+     */
+    public boolean isLastItemInGroup(int position) {
+        if (mGroupItemCountMap == null || mGroupItemCountMap.isEmpty()) {
+            return false;
+        }
+
+        int groupPosition = getGroupPosition(position);
+        if (groupPosition != -1) {
+            int groupItemCount = getGroupItemCount(groupPosition);
+            if (groupItemCount != -1
+                    && (groupItemCount + mGroupPositionMap.get(groupPosition) == position)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

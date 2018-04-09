@@ -7,5 +7,6 @@
         <item>GroupList</item>
         <item>GroupGrid</item>
         <item>GroupSticky</item>
+        <item>GroupItemDecoration</item>
     </string-array>
 </resources>
