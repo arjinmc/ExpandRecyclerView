@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
@@ -15,7 +16,6 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
-import com.arjinmc.recyclerviewexpandsample.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +76,8 @@ public class GroupStickyActivity extends AppCompatActivity {
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.show(GroupStickyActivity.this
-                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition);
+                        Toast.makeText(GroupStickyActivity.this
+                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

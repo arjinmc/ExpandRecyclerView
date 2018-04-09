@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
@@ -22,7 +23,6 @@ import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 import com.arjinmc.recyclerviewexpandsample.model.Mode;
-import com.arjinmc.recyclerviewexpandsample.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,8 +132,8 @@ public class GroupListActivity extends AppCompatActivity {
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.show(GroupListActivity.this
-                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition);
+                        Toast.makeText(GroupListActivity.this
+                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

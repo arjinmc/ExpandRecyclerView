@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
@@ -14,7 +16,6 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewGroupItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
-import com.arjinmc.recyclerviewexpandsample.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +70,9 @@ public class GroupItemDecorationActivity extends AppCompatActivity {
                 tvGroup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.show(GroupItemDecorationActivity.this
-                                , "Group: " + groupPosition);
+                        Log.e("group click", "Group: " + groupPosition);
+                        Toast.makeText(GroupItemDecorationActivity.this
+                                , "Group: " + groupPosition, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -83,8 +85,9 @@ public class GroupItemDecorationActivity extends AppCompatActivity {
                 tvContent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.show(GroupItemDecorationActivity.this
-                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition);
+                        Log.e("item click", "Group: " + groupPosition + "\titemPosition: " + itemPosition);
+                        Toast.makeText(GroupItemDecorationActivity.this
+                                , "Group: " + groupPosition + "\titemPosition: " + itemPosition, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
