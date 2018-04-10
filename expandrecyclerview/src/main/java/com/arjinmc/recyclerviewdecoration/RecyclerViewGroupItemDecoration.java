@@ -206,7 +206,11 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
             if ((mAdapter.getItemViewType(viewPosition) != mGroupType
                     && mAdapter.isLastItemInGroup(viewPosition)
-                    && mGroupEndVisible) || viewPosition != parent.getAdapter().getItemCount() - 1) {
+                    && !mGroupEndVisible)) {
+                return;
+            }
+
+            if (viewPosition != parent.getAdapter().getItemCount() - 1) {
 
                 if (mDrawableRid != 0) {
                     outRect.set(0, 0, 0, mCurrentThickness);
@@ -226,7 +230,11 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
             if ((mAdapter.getItemViewType(viewPosition) != mGroupType
                     && mAdapter.isLastItemInGroup(viewPosition)
-                    && mGroupEndVisible) || viewPosition != parent.getAdapter().getItemCount() - 1) {
+                    && !mGroupEndVisible)) {
+                return;
+            }
+
+            if (viewPosition != parent.getAdapter().getItemCount() - 1) {
                 if (mDrawableRid != 0) {
                     outRect.set(0, 0, mCurrentThickness, 0);
                 } else {
