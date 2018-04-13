@@ -656,6 +656,13 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
      */
     private int getChildPositionInGroup(int groupPosition, int position) {
 
+        if (groupPosition < 0 || position < 0) {
+            return -1;
+        }
+        if (getItemViewType(position) == mGroupViewType) {
+            return -1;
+        }
+
         if (mChildItemPositionCacheMap == null)
             mChildItemPositionCacheMap = new ArrayMap<>();
         if (mDataList == null || mDataList.isEmpty()) return -1;
@@ -665,11 +672,28 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 
         int groupItemCount = mGroupItemCountMap.get(groupPosition);
         int groupRealPosition = mGroupPositionMap.get(groupPosition);
+        if (groupItemCount == 0) {
+            return -1;
+        }
         positionInGroup = (position - groupRealPosition - 1) % groupItemCount;
         mChildItemPositionCacheMap.put(position, positionInGroup);
 
         return positionInGroup;
 
+    }
+
+    /**
+     * find out the child position of its group
+     *
+     * @param position adapter item position
+     * @return
+     */
+    public int getChildPositionInGroup(int position) {
+        if (position < 0) {
+            return -1;
+        }
+        int groupPosition = getGroupPosition(position);
+        return getChildPositionInGroup(groupPosition, position);
     }
 
 

@@ -20,7 +20,6 @@
         <activity android:name=".GroupListActivity"/>
         <activity android:name=".GroupGridActivity"/>
         <activity android:name=".GroupStickyActivity"/>
-        <activity android:name=".GroupItemDecorationActivity"/>
     </application>
 
 </manifest>

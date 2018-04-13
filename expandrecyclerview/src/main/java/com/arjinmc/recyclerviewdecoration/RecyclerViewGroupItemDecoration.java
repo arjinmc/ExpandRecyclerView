@@ -57,18 +57,13 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
     private int mDashGap = 0;
     private int mPaddingStart = 0;
     private int mPaddingEnd = 0;
-    /**
-     * border line for grid mode
-     */
-    private boolean mGridLeftVisible;
-    private boolean mGridRightVisible;
-    private boolean mGridTopVisible;
-    private boolean mGridBottomVisible;
+
     /**
      * spacing for grid mode
      */
     public int mGridHorizontalSpacing;
     public int mGridVerticalSpacing;
+
 
     /**
      * mark the group viewType
@@ -78,6 +73,11 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
      * set ItemDecoration of a group start/end visible or invisible
      */
     private boolean mGroupStartVisible, mGroupEndVisible;
+
+    /**
+     * border line for group (grid mode)
+     */
+    private boolean mGroupLeftVisible, mGroupTopVisible, mGroupRightVisible, mGroupBottomVisible;
 
     /**
      * direction mode for decoration
@@ -121,15 +121,15 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
         this.mDashWidth = params.dashWidth;
         this.mPaddingStart = params.paddingStart;
         this.mPaddingEnd = params.paddingEnd;
-        this.mGridLeftVisible = params.gridLeftVisible;
-        this.mGridRightVisible = params.gridRightVisible;
-        this.mGridTopVisible = params.gridTopVisible;
-        this.mGridBottomVisible = params.gridBottomVisible;
         this.mGridHorizontalSpacing = params.gridHorizontalSpacing;
         this.mGridVerticalSpacing = params.gridVerticalSpacing;
         this.mGroupType = params.groupType;
         this.mGroupStartVisible = params.groupStartVisible;
         this.mGroupEndVisible = params.groupEndVisible;
+        this.mGroupLeftVisible = params.groupLeftVisible;
+        this.mGroupTopVisible = params.groupTopVisible;
+        this.mGroupRightVisible = params.groupRightVisible;
+        this.mGroupBottomVisible = params.groupBottomVisible;
 
     }
 
@@ -245,16 +245,20 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
         } else if (mMode == RVItemDecorationConst.MODE_GRID) {
             int columnSize = ((GridLayoutManager) parent.getLayoutManager()).getSpanCount();
-            int itemSize = parent.getAdapter().getItemCount();
+            int itemSize = mAdapter.getGroupItemCount(mAdapter.getGroupPosition(viewPosition));
+            int positionInGroup = mAdapter.getChildPositionInGroup(viewPosition);
 
+            if (positionInGroup == -1 || itemSize == 0) {
+                return;
+            }
             if (mDrawableRid != 0) {
                 if (hasNinePatch) {
-                    setGridOffsets(outRect, viewPosition, columnSize, itemSize, 0);
+                    setGridOffsets(outRect, positionInGroup, columnSize, itemSize, 0);
                 } else {
-                    setGridOffsets(outRect, viewPosition, columnSize, itemSize, 1);
+                    setGridOffsets(outRect, positionInGroup, columnSize, itemSize, 1);
                 }
             } else {
-                setGridOffsets(outRect, viewPosition, columnSize, itemSize, -1);
+                setGridOffsets(outRect, positionInGroup, columnSize, itemSize, -1);
             }
         }
 
@@ -434,7 +438,6 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
         int childrenCount = parent.getChildCount();
         int columnSize = ((GridLayoutManager) parent.getLayoutManager()).getSpanCount();
-        int itemSize = parent.getAdapter().getItemCount();
 
         if (mDrawableRid != 0) {
 
@@ -448,11 +451,19 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                 int myR = childView.getRight();
                 int viewPosition = parent.getLayoutManager().getPosition(childView);
 
+                int itemSize = mAdapter.getGroupItemCount(mAdapter.getGroupPosition(viewPosition));
+                int positionInGroup = mAdapter.getChildPositionInGroup(viewPosition);
+
+                if (positionInGroup == -1) {
+                    continue;
+                }
                 //when columnSize/spanCount is One
                 if (columnSize == 1) {
-                    if (isFirstGridRow(viewPosition, columnSize)) {
 
-                        if (mGridLeftVisible) {
+                    //if is first row in group
+                    if (isFirstGridRow(positionInGroup, columnSize)) {
+
+                        if (mGroupLeftVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myT
@@ -463,7 +474,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                                 c.drawBitmap(mBmp, myL - mThickness, myT, mPaint);
                             }
                         }
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myT - mThickness
@@ -474,7 +485,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                                 c.drawBitmap(mBmp, myL - mThickness, myT - mThickness, mPaint);
                             }
                         }
-                        if (mGridRightVisible) {
+                        if (mGroupRightVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
                                         , myT
@@ -489,7 +500,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                         //not first row
                     } else {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myT - mThickness
@@ -504,7 +515,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             }
                         }
 
-                        if (mGridRightVisible) {
+                        if (mGroupRightVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
                                         , myT - mThickness
@@ -518,8 +529,8 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                     }
 
-                    if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                        if (mGridBottomVisible) {
+                    if (isLastGridRow(positionInGroup, itemSize, columnSize)) {
+                        if (mGroupBottomVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myB
@@ -547,9 +558,10 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                     //when columnSize/spanCount is Not One
                 } else {
-                    if (isFirstGridColumn(viewPosition, columnSize) && isFirstGridRow(viewPosition, columnSize)) {
+                    if (isFirstGridColumn(positionInGroup, columnSize)
+                            && isFirstGridRow(positionInGroup, columnSize)) {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myT - mThickness
@@ -561,7 +573,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             }
                         }
 
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL
                                         , myT - mThickness
@@ -574,7 +586,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                         }
 
                         if (itemSize == 1) {
-                            if (mGridRightVisible) {
+                            if (mGroupRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
                                             , myT - mThickness
@@ -600,9 +612,9 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             }
                         }
 
-                    } else if (isFirstGridRow(viewPosition, columnSize)) {
+                    } else if (isFirstGridRow(positionInGroup, columnSize)) {
 
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL
                                         , myT - mThickness
@@ -614,8 +626,8 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             }
                         }
 
-                        if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
-                            if (mGridRightVisible) {
+                        if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
+                            if (mGroupRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
                                             , myT - mThickness
@@ -641,8 +653,8 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             }
                         }
 
-                    } else if (isFirstGridColumn(viewPosition, columnSize)) {
-                        if (mGridLeftVisible) {
+                    } else if (isFirstGridColumn(positionInGroup, columnSize)) {
+                        if (mGroupLeftVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL - mThickness
                                         , myT
@@ -667,8 +679,8 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                                     , mPaint);
                         }
                     } else {
-                        if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
-                            if (mGridRightVisible) {
+                        if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
+                            if (mGroupRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
                                             , myT - mThickness
@@ -699,13 +711,13 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                     }
 
                     //bottom line
-                    if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                        if (mGridBottomVisible) {
+                    if (isLastGridRow(positionInGroup, itemSize, columnSize)) {
+                        if (mGroupBottomVisible) {
                             if (itemSize == 1) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myL - mThickness
                                             , myB
-                                            , myR + mThickness
+                                            , myR + (mGroupRightVisible ? mThickness : 0)
                                             , myB + mThickness);
                                     mNinePatch.draw(c, rect);
                                 } else {
@@ -714,7 +726,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                                             , myB
                                             , mPaint);
                                 }
-                            } else if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
+                            } else if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myL - mThickness
                                             , myB
@@ -773,25 +785,32 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                 int myR = childView.getRight();
                 int viewPosition = parent.getLayoutManager().getPosition(childView);
 
+                int itemSize = mAdapter.getGroupItemCount(mAdapter.getGroupPosition(viewPosition));
+                int positionInGroup = mAdapter.getChildPositionInGroup(viewPosition);
+
+                if (positionInGroup == -1) {
+                    continue;
+                }
+
                 //when columnSize/spanCount is One
                 if (columnSize == 1) {
-                    if (isFirstGridRow(viewPosition, columnSize)) {
+                    if (isFirstGridRow(positionInGroup, columnSize)) {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness / 2, myT);
                             path.lineTo(myL - mThickness / 2, myB);
                             c.drawPath(path, mPaint);
                         }
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness, myT - mThickness / 2);
                             path.lineTo(myR + mThickness, myT - mThickness / 2);
                             c.drawPath(path, mPaint);
                         }
-                        if (mGridRightVisible) {
+                        if (mGroupRightVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myR + mThickness / 2, myT);
@@ -802,7 +821,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                         //not first row
                     } else {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness / 2
@@ -812,7 +831,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             c.drawPath(path, mPaint);
                         }
 
-                        if (mGridRightVisible) {
+                        if (mGroupRightVisible) {
                             Path path = new Path();
                             mPaint.setStrokeWidth(mThickness);
                             path.moveTo(myR + mThickness / 2
@@ -824,8 +843,8 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                     }
 
-                    if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                        if (mGridBottomVisible) {
+                    if (isLastGridRow(positionInGroup, itemSize, columnSize)) {
+                        if (mGroupBottomVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness
@@ -849,9 +868,10 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                     //when columnSize/spanCount is Not One
                 } else {
-                    if (isFirstGridColumn(viewPosition, columnSize) && isFirstGridRow(viewPosition, columnSize)) {
+                    if (isFirstGridColumn(positionInGroup, columnSize)
+                            && isFirstGridRow(positionInGroup, columnSize)) {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness / 2
@@ -861,7 +881,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             c.drawPath(path, mPaint);
                         }
 
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL
@@ -873,7 +893,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                         }
 
                         if (itemSize == 1) {
-                            if (mGridRightVisible) {
+                            if (mGroupRightVisible) {
                                 mPaint.setStrokeWidth(mThickness);
                                 Path path = new Path();
                                 path.moveTo(myR + mThickness / 2
@@ -895,9 +915,9 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             c.drawPath(path, mPaint);
                         }
 
-                    } else if (isFirstGridRow(viewPosition, columnSize)) {
+                    } else if (isFirstGridRow(positionInGroup, columnSize)) {
 
-                        if (mGridTopVisible) {
+                        if (mGroupTopVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL
@@ -908,14 +928,11 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                         }
 
-                        if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
+                        if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
                             mPaint.setStrokeWidth(mThickness);
-                            if (mGridRightVisible) {
+                            if (mGroupRightVisible) {
 
-                                int alterY = 0;
-                                if (isLastSecondGridRowNotDivided(viewPosition, itemSize, columnSize)) {
-                                    alterY = (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing);
-                                }
+                                int alterY = (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing);
                                 Path path = new Path();
                                 path.moveTo(myR + mThickness / 2
                                         , myT - mThickness);
@@ -935,9 +952,9 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                             c.drawPath(path, mPaint);
                         }
 
-                    } else if (isFirstGridColumn(viewPosition, columnSize)) {
+                    } else if (isFirstGridColumn(positionInGroup, columnSize)) {
 
-                        if (mGridLeftVisible) {
+                        if (mGroupLeftVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             Path path = new Path();
                             path.moveTo(myL - mThickness / 2
@@ -962,12 +979,12 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
                         mPaint.setStrokeWidth(mThickness);
 
-                        if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
+                        if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
 
-                            if (mGridRightVisible) {
+                            if (mGroupRightVisible) {
 
                                 int alterY = 0;
-                                if (isLastSecondGridRowNotDivided(viewPosition, itemSize, columnSize)) {
+                                if (isLastSecondGridRowNotDivided(positionInGroup, itemSize, columnSize)) {
                                     alterY = (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing);
                                 }
                                 Path path = new Path();
@@ -991,17 +1008,17 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                     }
 
                     //bottom line
-                    if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                        if (mGridBottomVisible) {
+                    if (isLastGridRow(positionInGroup, itemSize, columnSize)) {
+                        if (mGroupBottomVisible) {
                             mPaint.setStrokeWidth(mThickness);
                             if (itemSize == 1) {
                                 Path path = new Path();
                                 path.moveTo(myL - mThickness
                                         , myB + mThickness / 2);
-                                path.lineTo(myR + mThickness
+                                path.lineTo(myR + (mGroupRightVisible ? mThickness : 0)
                                         , myB + mThickness / 2);
                                 c.drawPath(path, mPaint);
-                            } else if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
+                            } else if (isLastGridColumn(positionInGroup, itemSize, columnSize)) {
                                 Path path = new Path();
                                 path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
                                         , myB + mThickness / 2);
@@ -1076,63 +1093,62 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
         if (columnSize == 1) {
             if (isFirstGridRow(viewPosition, columnSize)) {
                 if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
-                            , (mGridTopVisible ? borderThickness : 0)
-                            , (mGridRightVisible ? borderThickness : 0)
-                            , (mGridBottomVisible ? borderThickness : y));
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
+                            , (mGroupTopVisible ? borderThickness : 0)
+                            , (mGroupRightVisible ? borderThickness : 0)
+                            , (mGroupBottomVisible ? borderThickness : y));
                 } else {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
-                            , (mGridTopVisible ? borderThickness : 0)
-                            , (mGridRightVisible ? borderThickness : 0)
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
+                            , (mGroupTopVisible ? borderThickness : 0)
+                            , (mGroupRightVisible ? borderThickness : 0)
                             , y);
                 }
 
             } else {
                 if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
                             , 0
-                            , (mGridRightVisible ? borderThickness : 0)
-                            , (mGridBottomVisible ? borderThickness : 0));
+                            , (mGroupRightVisible ? borderThickness : 0)
+                            , (mGroupBottomVisible ? borderThickness : 0));
                 } else {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
                             , 0
-                            , (mGridRightVisible ? borderThickness : 0)
+                            , (mGroupRightVisible ? borderThickness : 0)
                             , y);
                 }
             }
         } else {
             if (isFirstGridColumn(viewPosition, columnSize)
                     && isFirstGridRow(viewPosition, columnSize)) {
-
-                outRect.set((mGridLeftVisible ? borderThickness : 0)
-                        , (mGridTopVisible ? borderThickness : 0)
+                outRect.set((mGroupLeftVisible ? borderThickness : 0)
+                        , (mGroupTopVisible ? borderThickness : 0)
                         , (itemSize == 1 ? borderThickness : x)
-                        , (isLastGridRow(viewPosition, itemSize, columnSize) ? borderThickness : y));
+                        , getGridMarginBottom(viewPosition, itemSize, columnSize, borderThickness, y));
 
             } else if (isFirstGridRow(viewPosition, columnSize)) {
 
                 if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
                     outRect.set(0
-                            , (mGridTopVisible ? borderThickness : 0)
-                            , (mGridRightVisible ? borderThickness : 0)
-                            , (isLastGridRow(viewPosition, itemSize, columnSize) ? borderThickness : y));
+                            , (mGroupTopVisible ? borderThickness : 0)
+                            , (mGroupRightVisible ? borderThickness : 0)
+                            , getGridMarginBottom(viewPosition, itemSize, columnSize, borderThickness, y));
                 } else {
                     outRect.set(0
-                            , (mGridTopVisible ? borderThickness : 0)
+                            , (mGroupTopVisible ? borderThickness : 0)
                             , x
-                            , (isLastGridRow(viewPosition, itemSize, columnSize) ? borderThickness : y));
+                            , getGridMarginBottom(viewPosition, itemSize, columnSize, borderThickness, y));
                 }
 
 
             } else if (isFirstGridColumn(viewPosition, columnSize)) {
 
                 if (isLastGridRow(viewPosition, itemSize, columnSize)) {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
                             , 0
                             , (isLastGridColumn(viewPosition, itemSize, columnSize) ? borderThickness : x)
-                            , (mGridBottomVisible ? borderThickness : 0));
+                            , (mGroupBottomVisible ? borderThickness : 0));
                 } else {
-                    outRect.set((mGridLeftVisible ? borderThickness : 0)
+                    outRect.set((mGroupLeftVisible ? borderThickness : 0)
                             , 0
                             , (isLastGridColumn(viewPosition, itemSize, columnSize) ? borderThickness : x)
                             , y);
@@ -1144,12 +1160,12 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                     if (isLastGridRow(viewPosition, itemSize, columnSize)) {
                         outRect.set(0
                                 , 0
-                                , (mGridRightVisible ? borderThickness : 0)
-                                , (mGridBottomVisible ? borderThickness : 0));
+                                , (mGroupRightVisible ? borderThickness : 0)
+                                , (mGroupBottomVisible ? borderThickness : 0));
                     } else {
                         outRect.set(0
                                 , 0
-                                , (mGridRightVisible ? borderThickness : 0)
+                                , (mGroupRightVisible ? borderThickness : 0)
                                 , y);
                     }
                 } else {
@@ -1157,7 +1173,7 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
                         outRect.set(0
                                 , 0
                                 , x
-                                , (mGridBottomVisible ? borderThickness : 0));
+                                , (mGroupBottomVisible ? borderThickness : 0));
                     } else {
                         outRect.set(0
                                 , 0
@@ -1240,6 +1256,27 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
             return true;
         }
         return false;
+    }
+
+    /**
+     * get Grid margin bottom
+     *
+     * @param position
+     * @param itemSize
+     * @param columnSize
+     * @param borderThickness
+     * @param verticalSpacing
+     * @return
+     */
+    private int getGridMarginBottom(int position, int itemSize, int columnSize, int borderThickness, int verticalSpacing) {
+        boolean isLastRow = isLastGridRow(position, itemSize, columnSize);
+        if (mGroupBottomVisible && isLastRow) {
+            return borderThickness;
+        } else if (isLastRow) {
+            return 0;
+        } else {
+            return verticalSpacing;
+        }
     }
 
     /**
@@ -1364,26 +1401,6 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
             return this;
         }
 
-        public Builder gridLeftVisible(boolean visible) {
-            params.gridLeftVisible = visible;
-            return this;
-        }
-
-        public Builder gridRightVisible(boolean visible) {
-            params.gridRightVisible = visible;
-            return this;
-        }
-
-        public Builder gridTopVisible(boolean visible) {
-            params.gridTopVisible = visible;
-            return this;
-        }
-
-        public Builder gridBottomVisible(boolean visible) {
-            params.gridBottomVisible = visible;
-            return this;
-        }
-
         public Builder gridHorizontalSpacing(int spacing) {
             if (spacing < 0) {
                 spacing = 0;
@@ -1415,6 +1432,26 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
             return this;
         }
 
+        public Builder groupLeftVisible(boolean visible) {
+            params.groupLeftVisible = visible;
+            return this;
+        }
+
+        public Builder groupTopVisible(boolean visible) {
+            params.groupTopVisible = visible;
+            return this;
+        }
+
+        public Builder groupRightVisible(boolean visible) {
+            params.groupRightVisible = visible;
+            return this;
+        }
+
+        public Builder groupBottomVisible(boolean visible) {
+            params.groupBottomVisible = visible;
+            return this;
+        }
+
     }
 
     private static class Param {
@@ -1426,15 +1463,15 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
         public int dashGap = 0;
         public int paddingStart;
         public int paddingEnd;
-        public boolean gridLeftVisible;
-        public boolean gridRightVisible;
-        public boolean gridTopVisible;
-        public boolean gridBottomVisible;
         public int gridHorizontalSpacing = 0;
         public int gridVerticalSpacing = 0;
         public int groupType = 0;
         public boolean groupStartVisible;
         public boolean groupEndVisible;
+        private boolean groupLeftVisible;
+        private boolean groupTopVisible;
+        private boolean groupRightVisible;
+        private boolean groupBottomVisible;
     }
 
 }
