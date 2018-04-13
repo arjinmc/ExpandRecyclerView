@@ -5,6 +5,7 @@ More information pls find out in the sample and Wiki documents.
 If you have any questions pls file a issue. I'm appreciated that you tell me if you find some bugs.
 
 [中文版](README_CN.md)
+
 [What's news](NEWS.md)
 
 ## Attention
