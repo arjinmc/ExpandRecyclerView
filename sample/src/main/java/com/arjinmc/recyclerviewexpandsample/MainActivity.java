@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 .thickness(5)
                 .create());
         RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
-        String[] titles = getResources().getStringArray(R.array.best_pratices);
+        String[] titles = getResources().getStringArray(R.array.best_practices);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter<>(this, Arrays.asList(titles)
                 , R.layout.item_main_list
                 , new RecyclerViewSingleTypeProcessor<String>() {

@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">RecyclerViewExpandSample</string>
 
-    <string-array name="best_pratices">
+    <string-array name="best_practices">
         <item>List</item>
         <item>Viewpager</item>
         <item>GroupList</item>
         <item>GroupGrid</item>
-        <item>GroupSticky</item>
+        <item>GroupSticky(unfinished,coming soon)</item>
     </string-array>
 </resources>
