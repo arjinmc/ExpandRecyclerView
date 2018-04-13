@@ -1,15 +1,14 @@
 # ExpandRecyclerView
-A lib for expand RecyclerView,including adapter,style and so on.
+一个扩展RecyclerView的库,包括适配器，样式等等.
 
-More information pls find out in the sample and Wiki documents.
-If you have any questions pls file a issue. I'm appreciated that you tell me if you find some bugs.
+具体使用方式请看sample，还有Wiki文档中的说明。  
+如果有什么不懂的地方，欢迎骚扰。如果你在使用的过程中发现了bug，请告诉我，非常感谢。
 
-[中文版](README_CN.md)
-[What's news](NEWS.md)
+[更新日志](NEWS_CN.md)
 
-## Attention
+## 注意
 
-This lib included [RecyclerViewDecoration](https://github.com/arjinmc/RecyclerViewDecoration).If you have used <strong>RecyclerViewDecoration</strong>, pls remove it.
+这个库包含[RecyclerViewDecoration](https://github.com/arjinmc/RecyclerViewDecoration).如果你已经使用了<strong>RecyclerViewDecoration</strong>, 请删除它。
 
 ### Gradle
 ```code
