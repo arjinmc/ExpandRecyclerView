@@ -52,3 +52,7 @@ compile 'com.arjinmc.android:expandrecyclerview:1.3'
    See the License for the specific language governing permissions and
    limitations under the License.
 ```
+
+## images
+![image](https://github.com/arjinmc/ExpandRecyclerView/blob/master/images/device-2018-04-13-174313.png)
+![image](https://github.com/arjinmc/ExpandRecyclerView/blob/master/images/device-2018-04-13-174237.png)
