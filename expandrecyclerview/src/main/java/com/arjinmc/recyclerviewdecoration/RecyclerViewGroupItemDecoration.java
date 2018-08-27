@@ -1405,6 +1405,9 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
             if (spacing < 0) {
                 spacing = 0;
             }
+            if (spacing % 2 != 0) {
+                spacing += 1;
+            }
             params.gridHorizontalSpacing = spacing;
             return this;
         }
@@ -1412,6 +1415,9 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
         public Builder gridVerticalSpacing(int spacing) {
             if (spacing < 0) {
                 spacing = 0;
+            }
+            if (spacing % 2 != 0) {
+                spacing += 1;
             }
             params.gridVerticalSpacing = spacing;
             return this;
