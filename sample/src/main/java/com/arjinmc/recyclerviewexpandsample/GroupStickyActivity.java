@@ -38,6 +38,7 @@ public class GroupStickyActivity extends AppCompatActivity {
     private CheckBox mCbIsGroup;
     private int mAddCount = -1;
 
+    //you can use any adapter of RecyclerView
     private RecyclerViewGroupAdapter mGroupAdapter;
     private List<Car> mDataList;
 
