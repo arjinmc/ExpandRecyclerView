@@ -63,7 +63,9 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
     public RecyclerViewGroupAdapter(Context context, List<E> dataList
             , @LayoutRes int[] typeLayoutIds, Integer groupType, RecyclerViewGroupTypeProcessor<E> groupTypeProcessor) {
         mContext = context;
-        if (groupType != null && groupType >= 0) mGroupViewType = groupType;
+        if (groupType != null && groupType >= 0) {
+            mGroupViewType = groupType;
+        }
         mDataList = new ArrayList<>();
         if (dataList != null && !dataList.isEmpty()) {
             mDataList.addAll(dataList);
@@ -130,10 +132,11 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
-        if (mDataList == null)
+        if (mDataList == null) {
             return 0;
-        else
+        } else {
             return mDataList.size();
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -585,10 +588,11 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
      * @return
      */
     public int getItemCount(int groupPosition) {
-        if (mGroupItemCountMap == null)
+        if (mGroupItemCountMap == null) {
             return -1;
-        else
+        } else {
             return mGroupItemCountMap.get(groupPosition);
+        }
     }
 
     /**
@@ -663,12 +667,16 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
             return -1;
         }
 
-        if (mChildItemPositionCacheMap == null)
+        if (mChildItemPositionCacheMap == null) {
             mChildItemPositionCacheMap = new ArrayMap<>();
-        if (mDataList == null || mDataList.isEmpty()) return -1;
+        }
+        if (mDataList == null || mDataList.isEmpty()) {
+            return -1;
+        }
         int positionInGroup = 0;
-        if (mChildItemPositionCacheMap.containsKey(position))
+        if (mChildItemPositionCacheMap.containsKey(position)) {
             return mChildItemPositionCacheMap.get(position);
+        }
 
         int groupItemCount = mGroupItemCountMap.get(groupPosition);
         int groupRealPosition = mGroupPositionMap.get(groupPosition);
@@ -696,7 +704,6 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
         return getChildPositionInGroup(groupPosition, position);
     }
 
-
     /**
      * check if is last item in it's Group
      *
@@ -722,7 +729,9 @@ public class RecyclerViewGroupAdapter<E> extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        if (mParent == null) mParent = recyclerView;
+        if (mParent == null) {
+            mParent = recyclerView;
+        }
 
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {

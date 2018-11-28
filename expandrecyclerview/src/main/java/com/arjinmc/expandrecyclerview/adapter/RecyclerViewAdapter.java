@@ -80,10 +80,11 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
     @Override
     public void onBindViewHolder(RecyclerViewViewHolder holder, int position) {
         // bind your data with this callback
-        if (mMultipleTypeProcessor != null)
+        if (mMultipleTypeProcessor != null) {
             mMultipleTypeProcessor.onBindViewHolder(holder, position, mDataList.get(position));
-        else if (mSingleTypeProcessor != null)
+        } else if (mSingleTypeProcessor != null) {
             mSingleTypeProcessor.onBindViewHolder(holder, position, mDataList.get(position));
+        }
 
         if (mOnItemClickListener != null) {
             final int lPosition = position;
@@ -99,17 +100,19 @@ public class RecyclerViewAdapter<E> extends RecyclerView.Adapter<RecyclerViewVie
     @Override
     public int getItemViewType(int position) {
         // make your view type rules with this callback,default type is 0
-        if (mMultipleTypeProcessor != null)
+        if (mMultipleTypeProcessor != null) {
             return mMultipleTypeProcessor.getItemViewType(position);
+        }
         return 0;
     }
 
     @Override
     public int getItemCount() {
-        if (mDataList == null || mDataList.isEmpty())
+        if (mDataList == null || mDataList.isEmpty()) {
             return 0;
-        else
+        } else {
             return mDataList.size();
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

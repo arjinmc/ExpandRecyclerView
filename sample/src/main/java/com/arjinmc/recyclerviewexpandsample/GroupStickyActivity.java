@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,12 +19,11 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
+import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
 
 /**
  * Sample for group list
@@ -30,15 +33,23 @@ import java.util.List;
 
 public class GroupStickyActivity extends AppCompatActivity {
 
+    private EditText mEtPosition;
+    private Button mBtnAdd;
+    private CheckBox mCbIsGroup;
+    private int mAddCount = -1;
+
     private RecyclerViewGroupAdapter mGroupAdapter;
     private List<Car> mDataList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_group_sticky);
         getSupportActionBar().setSubtitle("GroupSticky");
 
+        mEtPosition = findViewById(R.id.et_position);
+        mBtnAdd = findViewById(R.id.btn_add);
+        mCbIsGroup = findViewById(R.id.cb_isGroup);
 
         RecyclerView rvList = findViewById(R.id.rv_list);
         RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
@@ -46,7 +57,8 @@ public class GroupStickyActivity extends AppCompatActivity {
                 .color(Color.GRAY)
                 .thickness(3)
                 .create());
-//        rvList.addItemDecoration(new RecyclerViewStickyHeadItemDecoration.Builder().isSmooth(true).create());
+        //default group view type is zero
+        rvList.addItemDecoration(new RecyclerViewStickyHeadItemDecoration.Builder().groupViewType(0).create());
         mDataList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Car car = new Car();
@@ -84,13 +96,41 @@ public class GroupStickyActivity extends AppCompatActivity {
 
             @Override
             public int getItemViewType(int position) {
-                if (mDataList.get(position).getGroup() != null)
+                if (mDataList.get(position).getGroup() != null) {
                     return 0;
+                }
                 return 1;
             }
         });
 
         rvList.setAdapter(mGroupAdapter);
+
+        mBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inputString = mEtPosition.getText().toString();
+                if (TextUtils.isEmpty(inputString)) {
+                    return;
+                }
+                try {
+                    Integer position = Integer.valueOf(inputString);
+                    if (position >= 0) {
+                        mAddCount++;
+                        Car car = new Car();
+                        car.setBrand("Car Band add " + mAddCount);
+                        car.setTypeName("Car Type add" + mAddCount);
+                        if (mCbIsGroup.isChecked()) {
+                            car.setGroup("Group Add " + mAddCount);
+                        }
+                        mDataList.add(position, car);
+                        mGroupAdapter.notifyDataInserted(position, car);
+//                        mGroupAdapter.notifyDataChanged(mDataList);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

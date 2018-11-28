@@ -26,6 +26,9 @@ public final class RecyclerViewStyleHelper {
      */
     public static void toLinearLayout(RecyclerView recyclerView
             , @LinearLayoutCompat.OrientationMode int orientation) {
+        if (recyclerView == null) {
+            return;
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()
                 , orientation, false));
     }
@@ -38,6 +41,9 @@ public final class RecyclerViewStyleHelper {
      */
     public static void toViewPager(RecyclerView recyclerView
             , @LinearLayoutCompat.OrientationMode int orientation) {
+        if (recyclerView == null) {
+            return;
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()
                 , orientation, false));
         new PagerSnapHelper().attachToRecyclerView(recyclerView);
@@ -48,17 +54,22 @@ public final class RecyclerViewStyleHelper {
      * @param spanCount    the count for column
      */
     public static void toGridView(RecyclerView recyclerView, int spanCount) {
+        if (recyclerView == null) {
+            return;
+        }
         recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), spanCount));
     }
 
     /**
-     *
      * @param recyclerView {@link RecyclerView}
-     * @param spanCount the count for column
+     * @param spanCount    the count for column
      * @param orientation  the orientation of Linearlayout
      */
     public static void toStaggeredGrid(RecyclerView recyclerView, int spanCount
             , @LinearLayoutCompat.OrientationMode int orientation) {
+        if (recyclerView == null) {
+            return;
+        }
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, orientation));
     }
 }
