@@ -15,11 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListActivity"/>
-        <activity android:name=".ViewPagerDemoActivity"/>
-        <activity android:name=".GroupListActivity"/>
-        <activity android:name=".GroupGridActivity"/>
-        <activity android:name=".GroupStickyActivity"/>
+        <activity android:name=".ListActivity" />
+        <activity android:name=".ViewPagerDemoActivity" />
+        <activity android:name=".GroupListActivity" />
+        <activity android:name=".GroupGridActivity" />
+        <activity android:name=".GroupStickyActivity" />
+        <activity android:name=".DragItemActivity" />
     </application>
 
 </manifest>
