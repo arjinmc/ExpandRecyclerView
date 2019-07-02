@@ -2,10 +2,6 @@ package com.arjinmc.recyclerviewexpandsample;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
@@ -97,7 +98,7 @@ public class GroupListActivity extends AppCompatActivity {
         });
 
         RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);
-        RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
+        RecyclerViewStyleHelper.toLinearLayout(rvList, RecyclerView.VERTICAL);
         rvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
                 .color(Color.GRAY)
                 .thickness(3)
@@ -140,8 +141,9 @@ public class GroupListActivity extends AppCompatActivity {
 
             @Override
             public int getItemViewType(int position) {
-                if (mDataList.get(position).getGroup() != null)
+                if (mDataList.get(position).getGroup() != null) {
                     return 0;
+                }
                 return 1;
             }
         });
@@ -393,7 +395,9 @@ public class GroupListActivity extends AppCompatActivity {
         String carType = mEtCarType.getText().toString();
         if (TextUtils.isEmpty(carType)) {
             return "test car type" + (++mNum);
-        } else return carType;
+        } else {
+            return carType;
+        }
 
     }
 
@@ -406,8 +410,9 @@ public class GroupListActivity extends AppCompatActivity {
     private int getSpecificPosition(EditText editText) {
         int position = -1;
         String positionString = editText.getText().toString();
-        if (!TextUtils.isEmpty(positionString))
+        if (!TextUtils.isEmpty(positionString)) {
             position = Integer.valueOf(positionString);
+        }
         return position;
     }
 

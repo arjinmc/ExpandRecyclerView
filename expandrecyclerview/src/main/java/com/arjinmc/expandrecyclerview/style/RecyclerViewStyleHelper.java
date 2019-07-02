@@ -1,11 +1,12 @@
 package com.arjinmc.expandrecyclerview.style;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 /**
  * <p>
@@ -19,13 +20,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 public final class RecyclerViewStyleHelper {
 
     /**
-     * transform to Horizontal LinearLayout
+     * Transform to Horizontal LinearLayout
      *
      * @param recyclerView @param recyclerView {@link RecyclerView}
-     * @param orientation  the orientation of LinearLayout
+     * @param orientation  the orientation of RecyclerView
      */
     public static void toLinearLayout(RecyclerView recyclerView
-            , @LinearLayoutCompat.OrientationMode int orientation) {
+            , @RecyclerView.Orientation int orientation) {
         if (recyclerView == null) {
             return;
         }
@@ -34,13 +35,13 @@ public final class RecyclerViewStyleHelper {
     }
 
     /**
-     * transform to ViewPager
+     * Transform to ViewPager
      *
      * @param recyclerView {@link RecyclerView}
-     * @param orientation  the orientation of Linearlayout
+     * @param orientation  the orientation of RecyclerView
      */
     public static void toViewPager(RecyclerView recyclerView
-            , @LinearLayoutCompat.OrientationMode int orientation) {
+            , @RecyclerView.Orientation int orientation) {
         if (recyclerView == null) {
             return;
         }
@@ -50,6 +51,8 @@ public final class RecyclerViewStyleHelper {
     }
 
     /**
+     * Transform grid style
+     *
      * @param recyclerView {@link RecyclerView}
      * @param spanCount    the count for column
      */
@@ -61,6 +64,8 @@ public final class RecyclerViewStyleHelper {
     }
 
     /**
+     * Transform staggered grid style
+     *
      * @param recyclerView {@link RecyclerView}
      * @param spanCount    the count for column
      * @param orientation  the orientation of Linearlayout
@@ -72,4 +77,21 @@ public final class RecyclerViewStyleHelper {
         }
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, orientation));
     }
+
+    /**
+     * Transform linearlayout snap item style
+     *
+     * @param recyclerView {@link RecyclerView}
+     * @param orientation  the orientation of Linearlayout
+     */
+    public static void toLinearSnap(RecyclerView recyclerView, @RecyclerView.Orientation int orientation) {
+        if (recyclerView == null) {
+            return;
+        }
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()
+                , orientation, false));
+        LinearSnapHelper linearSnapHelper = new LinearSnapHelper();
+        linearSnapHelper.attachToRecyclerView(recyclerView);
+    }
+
 }

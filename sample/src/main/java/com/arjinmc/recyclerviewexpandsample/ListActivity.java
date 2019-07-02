@@ -2,13 +2,13 @@ package com.arjinmc.recyclerviewexpandsample;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewMultipleTypeProcessor;
@@ -68,7 +68,7 @@ public class ListActivity extends AppCompatActivity {
         });
 
         mRvList = findViewById(R.id.rv_list);
-        RecyclerViewStyleHelper.toLinearLayout(mRvList, LinearLayout.VERTICAL);
+        RecyclerViewStyleHelper.toLinearLayout(mRvList, RecyclerView.VERTICAL);
         mRvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
                 .color(Color.GREEN)
                 .thickness(1)
@@ -93,8 +93,9 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public int getItemViewType(int position) {
                 //define two viewTypes
-                if (position % 2 == 0)
+                if (position % 2 == 0) {
                     return 1;
+                }
                 return 0;
             }
         });

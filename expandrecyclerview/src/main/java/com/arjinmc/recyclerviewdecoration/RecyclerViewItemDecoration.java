@@ -11,14 +11,15 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.collection.ArrayMap;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.regex.Pattern;
 
@@ -142,10 +143,12 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 mNinePatch = new NinePatch(mBmp, mBmp.getNinePatchChunk(), null);
             }
 
-            if (mMode == RVItemDecorationConst.MODE_HORIZONTAL)
+            if (mMode == RVItemDecorationConst.MODE_HORIZONTAL) {
                 mCurrentThickness = mThickness == 0 ? mBmp.getHeight() : mThickness;
-            if (mMode == RVItemDecorationConst.MODE_VERTICAL)
+            }
+            if (mMode == RVItemDecorationConst.MODE_VERTICAL) {
                 mCurrentThickness = mThickness == 0 ? mBmp.getWidth() : mThickness;
+            }
         }
 
         mPaint = new Paint();
@@ -289,8 +292,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
 
             for (int i = 0; i < childrenCount; i++) {
-                if (!mLastLineVisible && i == childrenCount - 1)
+                if (!mLastLineVisible && i == childrenCount - 1) {
                     break;
+                }
                 View childView = parent.getChildAt(i);
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
@@ -333,8 +337,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             }
 
             for (int i = 0; i < childrenCount; i++) {
-                if (!mLastLineVisible && i == childrenCount - 1)
+                if (!mLastLineVisible && i == childrenCount - 1) {
                     break;
+                }
                 View childView = parent.getChildAt(i);
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
@@ -378,8 +383,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 }
             }
             for (int i = 0; i < childrenCount; i++) {
-                if (!mLastLineVisible && i == childrenCount - 1)
+                if (!mLastLineVisible && i == childrenCount - 1) {
                     break;
+                }
                 View childView = parent.getChildAt(i);
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
@@ -417,8 +423,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             }
 
             for (int i = 0; i < childrenCount; i++) {
-                if (!mLastLineVisible && i == childrenCount - 1)
+                if (!mLastLineVisible && i == childrenCount - 1) {
                     break;
+                }
                 View childView = parent.getChildAt(i);
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
@@ -1071,15 +1078,17 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             mGridVerticalSpacing = mGridHorizontalSpacing = 0;
         } else {
 
-            if (mGridHorizontalSpacing != 0)
+            if (mGridHorizontalSpacing != 0) {
                 x = mGridHorizontalSpacing;
-            else
+            } else {
                 x = mThickness;
+            }
 
-            if (mGridVerticalSpacing != 0)
+            if (mGridVerticalSpacing != 0) {
                 y = mGridVerticalSpacing;
-            else
+            } else {
                 y = mThickness;
+            }
 
         }
 

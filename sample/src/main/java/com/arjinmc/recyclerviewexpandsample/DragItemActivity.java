@@ -1,12 +1,12 @@
 package com.arjinmc.recyclerviewexpandsample;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewSingleTypeProcessor;
@@ -35,7 +35,7 @@ public class DragItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.rv_list);
-        RecyclerViewStyleHelper.toLinearLayout(mRecyclerView, LinearLayoutManager.VERTICAL);
+        RecyclerViewStyleHelper.toLinearLayout(mRecyclerView, RecyclerView.VERTICAL);
 
         mDataList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

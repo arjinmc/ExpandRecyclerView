@@ -9,7 +9,7 @@ package com.arjinmc.expandrecyclerview.adapter;
 public abstract class RecyclerViewSingleTypeProcessor<E> {
 
     /**
-     * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder
+     * Callback {@link androidx.recyclerview.widget.RecyclerView.Adapter} onBindViewHolder
      *
      * @param holder   viewHolder
      * @param position the position of the item

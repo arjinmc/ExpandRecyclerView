@@ -3,10 +3,10 @@ package com.arjinmc.recyclerviewexpandsample;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewSingleTypeProcessor;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 .color(Color.GRAY)
                 .thickness(5)
                 .create());
-        RecyclerViewStyleHelper.toLinearLayout(rvList, LinearLayout.VERTICAL);
+        RecyclerViewStyleHelper.toLinearLayout(rvList, RecyclerView.VERTICAL);
         String[] titles = getResources().getStringArray(R.array.best_practices);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter<>(this, Arrays.asList(titles)
                 , R.layout.item_main_list
@@ -75,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 5:
                 jumpToActivity(DragItemActivity.class);
+                break;
+            case 6:
+                jumpToActivity(LooperLinearLayoutActivity.class);
+                break;
+            default:
                 break;
         }
     }

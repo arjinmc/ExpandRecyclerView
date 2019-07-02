@@ -21,6 +21,7 @@
         <activity android:name=".GroupGridActivity" />
         <activity android:name=".GroupStickyActivity" />
         <activity android:name=".DragItemActivity" />
+        <activity android:name=".LooperLinearLayoutActivity"/>
     </application>
 
 </manifest>

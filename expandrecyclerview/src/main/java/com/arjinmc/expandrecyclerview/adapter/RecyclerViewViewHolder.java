@@ -1,9 +1,10 @@
 package com.arjinmc.expandrecyclerview.adapter;
 
-import android.support.annotation.IdRes;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Common ViewHolder for RecyclerView

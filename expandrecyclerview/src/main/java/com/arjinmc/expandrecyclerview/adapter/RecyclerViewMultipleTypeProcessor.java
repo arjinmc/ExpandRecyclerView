@@ -10,7 +10,7 @@ package com.arjinmc.expandrecyclerview.adapter;
 public abstract class RecyclerViewMultipleTypeProcessor<E> {
 
     /**
-     * Callback {@link android.support.v7.widget.RecyclerView.Adapter} onBindViewHolder
+     * Callback {@link androidx.recyclerview.widget.RecyclerView.Adapter} onBindViewHolder
      *
      * @param holder   viewHolder
      * @param position the position of the item
@@ -19,7 +19,7 @@ public abstract class RecyclerViewMultipleTypeProcessor<E> {
     public abstract void onBindViewHolder(RecyclerViewViewHolder holder, int position, E object);
 
     /**
-     * Callback {@link android.support.v7.widget.RecyclerView.Adapter} getItemViewType
+     * Callback {@link androidx.recyclerview.widget.RecyclerView.Adapter} getItemViewType
      *
      * @param position the position of the item
      */
