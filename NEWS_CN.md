@@ -1,3 +1,6 @@
+# v2.0 发布(2019/07/02)
+更新使用androidx libs.
+
 # v1.3.2 发布(2018/11/28)
 加入RecyclerViewStickyHeadItemDecoration，自动将分组样式变成sticky head模式。
 
