@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:hint="car type" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
