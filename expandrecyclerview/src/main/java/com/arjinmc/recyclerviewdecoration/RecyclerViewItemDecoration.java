@@ -12,7 +12,6 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -280,12 +279,16 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
-                    if (hasNinePatch) {
-                        Rect rect = new Rect(mPaddingStart, myY - mCurrentThickness
-                                , parent.getWidth() - mPaddingEnd, myY);
-                        mNinePatch.draw(c, rect);
-                    } else {
-                        c.drawBitmap(mBmp, mPaddingStart, myY - mCurrentThickness, mPaint);
+
+                    if (canDrawHorizontalLine(parent, childView, true)) {
+
+                        if (hasNinePatch) {
+                            Rect rect = new Rect(mPaddingStart + parent.getPaddingLeft(), myY - mCurrentThickness
+                                    , parent.getWidth() - parent.getPaddingBottom() - mPaddingEnd, myY);
+                            mNinePatch.draw(c, rect);
+                        } else {
+                            c.drawBitmap(mBmp, mPaddingStart + parent.getPaddingLeft(), myY - mCurrentThickness, mPaint);
+                        }
                     }
                 }
             }
@@ -300,14 +303,17 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
 
-                    int myY = childView.getBottom();
+                    if (canDrawHorizontalLine(parent, childView, false)) {
 
-                    if (hasNinePatch) {
-                        Rect rect = new Rect(mPaddingStart, myY
-                                , parent.getWidth() - mPaddingEnd, myY + mCurrentThickness);
-                        mNinePatch.draw(c, rect);
-                    } else {
-                        c.drawBitmap(mBmp, mPaddingStart, myY, mPaint);
+                        int myY = childView.getBottom();
+
+                        if (hasNinePatch) {
+                            Rect rect = new Rect(mPaddingStart + parent.getPaddingLeft(), myY
+                                    , parent.getWidth() - parent.getPaddingRight() - mPaddingEnd, myY + mCurrentThickness);
+                            mNinePatch.draw(c, rect);
+                        } else {
+                            c.drawBitmap(mBmp, mPaddingStart + parent.getPaddingLeft(), myY, mPaint);
+                        }
                     }
                 }
 
@@ -327,12 +333,14 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
-                    int myY = childView.getTop() - mThickness / 2;
 
-                    Path path = new Path();
-                    path.moveTo(mPaddingStart, myY);
-                    path.lineTo(parent.getWidth() - mPaddingEnd, myY);
-                    c.drawPath(path, mPaint);
+                    if (canDrawHorizontalLine(parent, childView, true)) {
+                        int myY = childView.getTop() - mThickness / 2;
+                        Path path = new Path();
+                        path.moveTo(mPaddingStart + parent.getPaddingLeft(), myY);
+                        path.lineTo(parent.getWidth() - mPaddingEnd - parent.getPaddingRight(), myY);
+                        c.drawPath(path, mPaint);
+                    }
                 }
             }
 
@@ -344,12 +352,15 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
-                    int myY = childView.getBottom() + mThickness / 2;
 
-                    Path path = new Path();
-                    path.moveTo(mPaddingStart, myY);
-                    path.lineTo(parent.getWidth() - mPaddingEnd, myY);
-                    c.drawPath(path, mPaint);
+                    if (canDrawHorizontalLine(parent, childView, false)) {
+                        int myY = childView.getBottom() + mThickness / 2;
+                        Path path = new Path();
+                        path.moveTo(mPaddingStart + parent.getPaddingLeft(), myY);
+                        path.lineTo(parent.getWidth() - mPaddingEnd - parent.getPaddingRight(), myY);
+                        c.drawPath(path, mPaint);
+                    }
+
                 }
 
             }
@@ -1271,7 +1282,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             if (parent.getLayoutManager() instanceof GridLayoutManager) {
                 mMode = RVItemDecorationConst.MODE_GRID;
             } else if (parent.getLayoutManager() instanceof LinearLayoutManager) {
-                if (((LinearLayoutManager) parent.getLayoutManager()).getOrientation() == LinearLayout.HORIZONTAL) {
+                if (((LinearLayoutManager) parent.getLayoutManager()).getOrientation() == RecyclerView.HORIZONTAL) {
                     mMode = RVItemDecorationConst.MODE_VERTICAL;
                 } else {
                     mMode = RVItemDecorationConst.MODE_HORIZONTAL;
@@ -1302,6 +1313,79 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         return false;
+    }
+
+    /**
+     * check if can draw first line for horizontal mode
+     *
+     * @param parent
+     * @param childView
+     * @param isFirstLine
+     * @return
+     */
+    private boolean canDrawHorizontalLine(RecyclerView parent, View childView, boolean isFirstLine) {
+
+        if (parent.getPaddingTop() == 0 && parent.getPaddingBottom() == 0) {
+            return true;
+        }
+
+        //the real first child
+        if (parent.getPaddingTop() != 0 && parent.getLayoutManager().getPosition(childView) == 0) {
+            if (mDrawableRid != 0) {
+                if (isFirstLine && childView.getTop() > 0 && parent.getPaddingTop() - childView.getTop() + mCurrentThickness > mCurrentThickness) {
+                    return false;
+                }
+            } else {
+                if (isFirstLine && childView.getTop() > 0 && parent.getPaddingTop() - childView.getTop() + mThickness > mThickness) {
+                    return false;
+                }
+            }
+
+        }
+
+        //current shown first child in parent
+        if (parent.getPaddingTop() != 0 && parent.indexOfChild(childView) == 0
+                && Math.abs(childView.getTop() - parent.getPaddingTop()) >= childView.getMeasuredHeight()) {
+            return false;
+        }
+
+        //current shown last second child in parent
+        if (parent.getPaddingBottom() != 0 && parent.indexOfChild(childView) == parent.getChildCount() - 2) {
+            if (mDrawableRid != 0) {
+                if (parent.getBottom() - childView.getBottom() - childView.getMeasuredHeight() - mCurrentThickness <= parent.getPaddingBottom()
+                        || parent.getBottom() - childView.getBottom()
+                        < parent.getChildAt(parent.getChildCount() - 1).getMeasuredHeight() + parent.getPaddingBottom()) {
+                    return false;
+                }
+            } else {
+                if (parent.getBottom() - childView.getBottom() - childView.getMeasuredHeight() - mThickness <= parent.getPaddingBottom()
+                        || parent.getBottom() - childView.getBottom()
+                        < parent.getChildAt(parent.getChildCount() - 1).getMeasuredHeight() + parent.getPaddingBottom()) {
+                    return false;
+                }
+            }
+        }
+
+        //current shown last child in parent
+        if (parent.getPaddingBottom() != 0 && parent.indexOfChild(childView) == parent.getChildCount() - 1) {
+            if (mDrawableRid != 0) {
+                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mCurrentThickness + childView.getMeasuredHeight()) {
+                    return true;
+                }
+                if (parent.getBottom() - childView.getBottom() != childView.getMeasuredHeight() + mCurrentThickness) {
+                    return false;
+                }
+            } else {
+                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mThickness + childView.getMeasuredHeight()) {
+                    return true;
+                }
+                if (parent.getBottom() - childView.getBottom() != childView.getMeasuredHeight() + mThickness) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public static class Builder {
