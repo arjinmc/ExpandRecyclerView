@@ -98,6 +98,10 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
      * sign for if has get the parent RecyclerView LayoutManager mode
      */
     private boolean hasGetParentLayoutMode = false;
+    /**
+     * mark the max height of child view
+     */
+    private int mChildViewMaxHeight;
     private Context mContext;
 
     public RecyclerViewItemDecoration() {
@@ -284,7 +288,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                         if (hasNinePatch) {
                             Rect rect = new Rect(mPaddingStart + parent.getPaddingLeft(), myY - mCurrentThickness
-                                    , parent.getWidth() - parent.getPaddingBottom() - mPaddingEnd, myY);
+                                    , parent.getWidth() - parent.getPaddingRight() - mPaddingEnd, myY);
                             mNinePatch.draw(c, rect);
                         } else {
                             c.drawBitmap(mBmp, mPaddingStart + parent.getPaddingLeft(), myY - mCurrentThickness, mPaint);
@@ -299,6 +303,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     break;
                 }
                 View childView = parent.getChildAt(i);
+                if (childView.getMeasuredHeight() > mChildViewMaxHeight) {
+                    mChildViewMaxHeight = childView.getMeasuredHeight();
+                }
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
@@ -349,6 +356,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     break;
                 }
                 View childView = parent.getChildAt(i);
+                if (childView.getMeasuredHeight() > mChildViewMaxHeight) {
+                    mChildViewMaxHeight = childView.getMeasuredHeight();
+                }
 
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
@@ -1331,16 +1341,13 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         //the real first child
         if (parent.getPaddingTop() != 0 && parent.getLayoutManager().getPosition(childView) == 0) {
-            if (mDrawableRid != 0) {
-                if (isFirstLine && childView.getTop() > 0 && parent.getPaddingTop() - childView.getTop() + mCurrentThickness > mCurrentThickness) {
-                    return false;
-                }
-            } else {
-                if (isFirstLine && childView.getTop() > 0 && parent.getPaddingTop() - childView.getTop() + mThickness > mThickness) {
-                    return false;
-                }
+            if (mDrawableRid != 0 && isFirstLine && childView.getTop() > 0
+                    && childView.getTop() < parent.getPaddingTop() + mCurrentThickness) {
+                return false;
+            } else if (mDrawableRid == 0 && isFirstLine && childView.getTop() > 0
+                    && childView.getTop() < parent.getPaddingTop() + mThickness) {
+                return false;
             }
-
         }
 
         //current shown first child in parent
@@ -1369,22 +1376,28 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
         //current shown last child in parent
         if (parent.getPaddingBottom() != 0 && parent.indexOfChild(childView) == parent.getChildCount() - 1) {
             if (mDrawableRid != 0) {
-                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mCurrentThickness + childView.getMeasuredHeight()) {
+                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mCurrentThickness + mChildViewMaxHeight) {
                     return true;
                 }
                 if (parent.getBottom() - childView.getBottom() != childView.getMeasuredHeight() + mCurrentThickness) {
                     return false;
                 }
+                if (parent.getBottom() - childView.getBottom() == childView.getMeasuredHeight() + mCurrentThickness) {
+                    return false;
+                }
             } else {
-                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mThickness + childView.getMeasuredHeight()) {
+
+                if (parent.getBottom() - childView.getBottom() >= parent.getPaddingBottom() + mThickness + mChildViewMaxHeight) {
                     return true;
                 }
                 if (parent.getBottom() - childView.getBottom() != childView.getMeasuredHeight() + mThickness) {
                     return false;
                 }
+                if (parent.getBottom() - childView.getBottom() == childView.getMeasuredHeight() + mThickness) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 
