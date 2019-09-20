@@ -14,7 +14,7 @@ This lib included [RecyclerViewDecoration](https://github.com/arjinmc/RecyclerVi
 
 ### Gradle
 ```code
-compile 'com.arjinmc.android:expandrecyclerview:2.0'
+compile 'com.arjinmc.android:expandrecyclerview:2.1'
 ```
 
 ### Maven
@@ -22,7 +22,7 @@ compile 'com.arjinmc.android:expandrecyclerview:2.0'
 <dependency>
     <groupId>com.arjinmc.android</groupId>
     <artifactId>expandrecyclerview</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
     <type>pom</type>
 </dependency>
 ```

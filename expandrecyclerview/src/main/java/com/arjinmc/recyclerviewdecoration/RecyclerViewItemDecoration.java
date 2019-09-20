@@ -360,7 +360,6 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     path.lineTo(parent.getWidth() - mPaddingEnd - parent.getPaddingRight(), myY);
                     c.drawPath(path, mPaint);
 
-
                 }
 
             }

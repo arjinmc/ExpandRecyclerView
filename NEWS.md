@@ -1,3 +1,6 @@
+# v2.1 release(2019/09/20)
+Fix fit RecyclerView padding for LinearLayoutManger.
+
 # v2.0 release(2019/07/02)
 Change to androidx libs.
 

@@ -1,3 +1,6 @@
+# v2.1 release(2019/09/20)
+修复适配LinearLayoutManger模式的RecyclerView内边距padding。
+
 # v2.0 发布(2019/07/02)
 更新使用androidx libs.
 
