@@ -148,12 +148,14 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             if (mMode == RVItemDecorationConst.MODE_VERTICAL) {
                 mCurrentThickness = mThickness == 0 ? mBmp.getWidth() : mThickness;
             }
+        } else {
+            mCurrentThickness = mThickness;
         }
 
         mPaint = new Paint();
         mPaint.setColor(mColor);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(mThickness);
+        mPaint.setStrokeWidth(mCurrentThickness);
     }
 
 
@@ -187,21 +189,11 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             if (!isIgnoreType(parent.getAdapter().getItemViewType(viewPosition))) {
                 if (!(!mLastLineVisible &&
                         viewPosition == parent.getAdapter().getItemCount() - 1)) {
-
-                    if (mDrawableRid != 0) {
-                        outRect.set(0, 0, 0, mCurrentThickness);
-                    } else {
-                        outRect.set(0, 0, 0, mThickness);
-                    }
-
+                    outRect.set(0, 0, 0, mCurrentThickness);
                 }
 
                 if (mFirstLineVisible && viewPosition == 0) {
-                    if (mDrawableRid != 0) {
-                        outRect.set(0, mCurrentThickness, 0, mCurrentThickness);
-                    } else {
-                        outRect.set(0, mThickness, 0, mThickness);
-                    }
+                    outRect.set(0, mCurrentThickness, 0, mCurrentThickness);
                 }
             } else {
                 outRect.set(0, 0, 0, 0);
@@ -211,19 +203,10 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             if (!isIgnoreType(parent.getAdapter().getItemViewType(viewPosition))) {
                 if (!(!mLastLineVisible &&
                         viewPosition == parent.getAdapter().getItemCount() - 1)) {
-                    if (mDrawableRid != 0) {
-                        outRect.set(0, 0, mCurrentThickness, 0);
-                    } else {
-                        outRect.set(0, 0, mThickness, 0);
-                    }
-
+                    outRect.set(0, 0, mCurrentThickness, 0);
                 }
                 if (mFirstLineVisible && viewPosition == 0) {
-                    if (mDrawableRid != 0) {
-                        outRect.set(mCurrentThickness, 0, mCurrentThickness, 0);
-                    } else {
-                        outRect.set(mThickness, 0, mThickness, 0);
-                    }
+                    outRect.set(mCurrentThickness, 0, mCurrentThickness, 0);
                 }
 
             } else {
@@ -325,7 +308,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
             boolean isPureLine = isPureLine();
             if (!isPureLine) {
-                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mThickness}, mDashGap);
+                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mCurrentThickness}, mDashGap);
                 mPaint.setPathEffect(effects);
             }
 
@@ -336,7 +319,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
 
-                    int myY = childView.getTop() - mThickness / 2;
+                    int myY = childView.getTop() - mCurrentThickness / 2;
 
                     Path path = new Path();
                     path.moveTo(mPaddingStart + parent.getPaddingLeft(), myY);
@@ -354,7 +337,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
 
-                    int myY = childView.getBottom() + mThickness / 2;
+                    int myY = childView.getBottom() + mCurrentThickness / 2;
                     Path path = new Path();
                     path.moveTo(mPaddingStart + parent.getPaddingLeft(), myY);
                     path.lineTo(parent.getWidth() - mPaddingEnd - parent.getPaddingRight(), myY);
@@ -424,7 +407,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
             boolean isPureLine = isPureLine();
             if (!isPureLine) {
-                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mThickness}, mDashGap);
+                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mCurrentThickness}, mDashGap);
                 mPaint.setPathEffect(effects);
             }
 
@@ -432,7 +415,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 View childView = parent.getChildAt(0);
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
-                    int myX = childView.getLeft() - mThickness / 2;
+                    int myX = childView.getLeft() - mCurrentThickness / 2;
                     Path path = new Path();
                     path.moveTo(myX, mPaddingStart + parent.getPaddingLeft());
                     path.lineTo(myX, parent.getHeight() - mPaddingEnd - parent.getPaddingRight());
@@ -449,7 +432,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 if (!isIgnoreType(parent.getAdapter().getItemViewType(
                         parent.getLayoutManager().getPosition(childView)))) {
 
-                    int myX = childView.getRight() + mThickness / 2;
+                    int myX = childView.getRight() + mCurrentThickness / 2;
                     Path path = new Path();
                     path.moveTo(myX, mPaddingStart + parent.getPaddingLeft());
                     path.lineTo(myX, parent.getHeight() - mPaddingEnd - parent.getPaddingRight());
@@ -474,7 +457,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         if (mDrawableRid != 0) {
 
-            mPaint.setStrokeWidth(mThickness);
+            mPaint.setStrokeWidth(mCurrentThickness);
 
             for (int i = 0; i < childrenCount; i++) {
                 View childView = parent.getChildAt(i);
@@ -490,31 +473,31 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                         if (mGridLeftVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
                                         , myT
                                         , myL
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL - mThickness, myT, mPaint);
+                                c.drawBitmap(mBmp, myL - mCurrentThickness, myT, mPaint);
                             }
                         }
                         if (mGridTopVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
-                                        , myT - mThickness
-                                        , myR + mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
+                                        , myT - mCurrentThickness
+                                        , myR + mCurrentThickness
                                         , myT);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL - mThickness, myT - mThickness, mPaint);
+                                c.drawBitmap(mBmp, myL - mCurrentThickness, myT - mCurrentThickness, mPaint);
                             }
                         }
                         if (mGridRightVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
                                         , myT
-                                        , myR + mThickness
+                                        , myR + mCurrentThickness
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
@@ -527,15 +510,15 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                         if (mGridLeftVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
-                                        , myT - mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
+                                        , myT - mCurrentThickness
                                         , myL
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
                                 c.drawBitmap(mBmp
-                                        , myL - mThickness
-                                        , myT - mThickness
+                                        , myL - mCurrentThickness
+                                        , myT - mCurrentThickness
                                         , mPaint);
                             }
                         }
@@ -543,12 +526,12 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                         if (mGridRightVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
-                                        , myT - mThickness
-                                        , myR + mThickness
+                                        , myT - mCurrentThickness
+                                        , myR + mCurrentThickness
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myR, myT - mThickness, mPaint);
+                                c.drawBitmap(mBmp, myR, myT - mCurrentThickness, mPaint);
                             }
                         }
 
@@ -557,21 +540,21 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     if (isLastGridRow(viewPosition, itemSize, columnSize)) {
                         if (mGridBottomVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
                                         , myB
-                                        , myR + mThickness
-                                        , myB + mThickness);
+                                        , myR + mCurrentThickness
+                                        , myB + mCurrentThickness);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL - mThickness, myB, mPaint);
+                                c.drawBitmap(mBmp, myL - mCurrentThickness, myB, mPaint);
                             }
                         }
                     } else {
                         if (hasNinePatch) {
                             Rect rect = new Rect(myL
                                     , myB
-                                    , myR + mThickness
-                                    , myB + mThickness);
+                                    , myR + mCurrentThickness
+                                    , myB + mCurrentThickness);
                             mNinePatch.draw(c, rect);
                         } else {
                             c.drawBitmap(mBmp
@@ -587,25 +570,25 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                         if (mGridLeftVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
-                                        , myT - mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
+                                        , myT - mCurrentThickness
                                         , myL
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL - mThickness, myT - mThickness, mPaint);
+                                c.drawBitmap(mBmp, myL - mCurrentThickness, myT - mCurrentThickness, mPaint);
                             }
                         }
 
                         if (mGridTopVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL
-                                        , myT - mThickness
+                                        , myT - mCurrentThickness
                                         , myR
                                         , myT);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL, myT - mThickness, mPaint);
+                                c.drawBitmap(mBmp, myL, myT - mCurrentThickness, mPaint);
                             }
                         }
 
@@ -613,25 +596,25 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                             if (mGridRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
-                                            , myT - mThickness
-                                            , myR + mThickness
+                                            , myT - mCurrentThickness
+                                            , myR + mCurrentThickness
                                             , myB);
                                     mNinePatch.draw(c, rect);
                                 } else {
-                                    c.drawBitmap(mBmp, myR, myT - mThickness, mPaint);
+                                    c.drawBitmap(mBmp, myR, myT - mCurrentThickness, mPaint);
                                 }
                             }
                         } else {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
-                                        , myT - mThickness
-                                        , myR + mThickness
+                                        , myT - mCurrentThickness
+                                        , myR + mCurrentThickness
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
                                 c.drawBitmap(mBmp
                                         , myR
-                                        , myT - mThickness
+                                        , myT - mCurrentThickness
                                         , mPaint);
                             }
                         }
@@ -641,12 +624,12 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                         if (mGridTopVisible) {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myL
-                                        , myT - mThickness
+                                        , myT - mCurrentThickness
                                         , myR
                                         , myT);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL, myT - mThickness, mPaint);
+                                c.drawBitmap(mBmp, myL, myT - mCurrentThickness, mPaint);
                             }
                         }
 
@@ -654,19 +637,19 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                             if (mGridRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
-                                            , myT - mThickness
-                                            , myR + mThickness
+                                            , myT - mCurrentThickness
+                                            , myR + mCurrentThickness
                                             , myB);
                                     mNinePatch.draw(c, rect);
                                 } else {
-                                    c.drawBitmap(mBmp, myR, myT - mThickness, mPaint);
+                                    c.drawBitmap(mBmp, myR, myT - mCurrentThickness, mPaint);
                                 }
                             }
                         } else {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
-                                        , myT - mThickness
-                                        , myR + mThickness
+                                        , myT - mCurrentThickness
+                                        , myR + mCurrentThickness
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
@@ -680,20 +663,20 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     } else if (isFirstGridColumn(viewPosition, columnSize)) {
                         if (mGridLeftVisible) {
                             if (hasNinePatch) {
-                                Rect rect = new Rect(myL - mThickness
+                                Rect rect = new Rect(myL - mCurrentThickness
                                         , myT
                                         , myL
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
-                                c.drawBitmap(mBmp, myL - mThickness, myT, mPaint);
+                                c.drawBitmap(mBmp, myL - mCurrentThickness, myT, mPaint);
                             }
                         }
 
                         if (hasNinePatch) {
                             Rect rect = new Rect(myR
                                     , myT
-                                    , myR + mThickness
+                                    , myR + mCurrentThickness
                                     , myB);
                             mNinePatch.draw(c, rect);
                         } else {
@@ -707,8 +690,8 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                             if (mGridRightVisible) {
                                 if (hasNinePatch) {
                                     Rect rect = new Rect(myR
-                                            , myT - mThickness
-                                            , myR + mThickness
+                                            , myT - mCurrentThickness
+                                            , myR + mCurrentThickness
                                             , myB);
                                     mNinePatch.draw(c, rect);
                                 } else {
@@ -722,7 +705,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                             if (hasNinePatch) {
                                 Rect rect = new Rect(myR
                                         , myT
-                                        , myR + mThickness
+                                        , myR + mCurrentThickness
                                         , myB);
                                 mNinePatch.draw(c, rect);
                             } else {
@@ -739,40 +722,40 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                         if (mGridBottomVisible) {
                             if (itemSize == 1) {
                                 if (hasNinePatch) {
-                                    Rect rect = new Rect(myL - mThickness
+                                    Rect rect = new Rect(myL - mCurrentThickness
                                             , myB
-                                            , myR + (mGridRightVisible ? mThickness : 0)
-                                            , myB + mThickness);
+                                            , myR + (mGridRightVisible ? mCurrentThickness : 0)
+                                            , myB + mCurrentThickness);
                                     mNinePatch.draw(c, rect);
                                 } else {
                                     c.drawBitmap(mBmp
-                                            , myL - mThickness
+                                            , myL - mCurrentThickness
                                             , myB
                                             , mPaint);
                                 }
                             } else if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
                                 if (hasNinePatch) {
-                                    Rect rect = new Rect(myL - mThickness
+                                    Rect rect = new Rect(myL - mCurrentThickness
                                             , myB
-                                            , myR + mThickness
-                                            , myB + mThickness);
+                                            , myR + mCurrentThickness
+                                            , myB + mCurrentThickness);
                                     mNinePatch.draw(c, rect);
                                 } else {
                                     c.drawBitmap(mBmp
-                                            , myL - mThickness
-                                            , myB + mThickness / 2
+                                            , myL - mCurrentThickness
+                                            , myB + mCurrentThickness / 2
                                             , mPaint);
                                 }
                             } else {
                                 if (hasNinePatch) {
-                                    Rect rect = new Rect(myL - mThickness
+                                    Rect rect = new Rect(myL - mCurrentThickness
                                             , myB
-                                            , myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
-                                            , myB + mThickness);
+                                            , myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing)
+                                            , myB + mCurrentThickness);
                                     mNinePatch.draw(c, rect);
                                 } else {
                                     c.drawBitmap(mBmp
-                                            , myL - mThickness
+                                            , myL - mCurrentThickness
                                             , myB, mPaint);
                                 }
                             }
@@ -780,10 +763,10 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                         }
                     } else {
                         if (hasNinePatch) {
-                            Rect rect = new Rect(myL - mThickness
+                            Rect rect = new Rect(myL - mCurrentThickness
                                     , myB
                                     , myR
-                                    , myB + (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing));
+                                    , myB + (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing));
                             mNinePatch.draw(c, rect);
                         } else {
                             c.drawBitmap(mBmp
@@ -798,7 +781,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         } else {
             if (!isPureLine()) {
-                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mThickness}, mDashGap);
+                PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mCurrentThickness}, mDashGap);
                 mPaint.setPathEffect(effects);
             }
             for (int i = 0; i < childrenCount; i++) {
@@ -814,24 +797,24 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     if (isFirstGridRow(viewPosition, columnSize)) {
 
                         if (mGridLeftVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness / 2, myT);
-                            path.lineTo(myL - mThickness / 2, myB);
+                            path.moveTo(myL - mCurrentThickness / 2, myT);
+                            path.lineTo(myL - mCurrentThickness / 2, myB);
                             c.drawPath(path, mPaint);
                         }
                         if (mGridTopVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness, myT - mThickness / 2);
-                            path.lineTo(myR + mThickness, myT - mThickness / 2);
+                            path.moveTo(myL - mCurrentThickness, myT - mCurrentThickness / 2);
+                            path.lineTo(myR + mCurrentThickness, myT - mCurrentThickness / 2);
                             c.drawPath(path, mPaint);
                         }
                         if (mGridRightVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myR + mThickness / 2, myT);
-                            path.lineTo(myR + mThickness / 2, myB);
+                            path.moveTo(myR + mCurrentThickness / 2, myT);
+                            path.lineTo(myR + mCurrentThickness / 2, myB);
                             c.drawPath(path, mPaint);
                         }
 
@@ -839,21 +822,21 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     } else {
 
                         if (mGridLeftVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness / 2
-                                    , myT - (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing));
-                            path.lineTo(myL - mThickness / 2
+                            path.moveTo(myL - mCurrentThickness / 2
+                                    , myT - (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing));
+                            path.lineTo(myL - mCurrentThickness / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
 
                         if (mGridRightVisible) {
                             Path path = new Path();
-                            mPaint.setStrokeWidth(mThickness);
-                            path.moveTo(myR + mThickness / 2
+                            mPaint.setStrokeWidth(mCurrentThickness);
+                            path.moveTo(myR + mCurrentThickness / 2
                                     , myT);
-                            path.lineTo(myR + mThickness / 2
+                            path.lineTo(myR + mCurrentThickness / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
@@ -862,24 +845,24 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                     if (isLastGridRow(viewPosition, itemSize, columnSize)) {
                         if (mGridBottomVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness
-                                    , myB + mThickness / 2);
-                            path.lineTo(myR + mThickness
-                                    , myB + mThickness / 2);
+                            path.moveTo(myL - mCurrentThickness
+                                    , myB + mCurrentThickness / 2);
+                            path.lineTo(myR + mCurrentThickness
+                                    , myB + mCurrentThickness / 2);
                             c.drawPath(path, mPaint);
                         }
                     } else {
-                        mPaint.setStrokeWidth(mThickness);
+                        mPaint.setStrokeWidth(mCurrentThickness);
                         if (mGridVerticalSpacing != 0) {
                             mPaint.setStrokeWidth(mGridVerticalSpacing);
                         }
                         Path path = new Path();
                         path.moveTo(myL
-                                , myB + (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing) / 2);
-                        path.lineTo(myR + mThickness
-                                , myB + (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing) / 2);
+                                , myB + (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing) / 2);
+                        path.lineTo(myR + mCurrentThickness
+                                , myB + (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing) / 2);
                         c.drawPath(path, mPaint);
                     }
 
@@ -888,45 +871,45 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     if (isFirstGridColumn(viewPosition, columnSize) && isFirstGridRow(viewPosition, columnSize)) {
 
                         if (mGridLeftVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness / 2
-                                    , myT - mThickness);
-                            path.lineTo(myL - mThickness / 2
+                            path.moveTo(myL - mCurrentThickness / 2
+                                    , myT - mCurrentThickness);
+                            path.lineTo(myL - mCurrentThickness / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
 
                         if (mGridTopVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
                             path.moveTo(myL
-                                    , myT - mThickness / 2);
+                                    , myT - mCurrentThickness / 2);
                             path.lineTo(myR
-                                    , myT - mThickness / 2);
+                                    , myT - mCurrentThickness / 2);
                             c.drawPath(path, mPaint);
 
                         }
 
                         if (itemSize == 1) {
                             if (mGridRightVisible) {
-                                mPaint.setStrokeWidth(mThickness);
+                                mPaint.setStrokeWidth(mCurrentThickness);
                                 Path path = new Path();
-                                path.moveTo(myR + mThickness / 2
-                                        , myT - mThickness);
-                                path.lineTo(myR + mThickness / 2
+                                path.moveTo(myR + mCurrentThickness / 2
+                                        , myT - mCurrentThickness);
+                                path.lineTo(myR + mCurrentThickness / 2
                                         , myB);
                                 c.drawPath(path, mPaint);
                             }
                         } else {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             if (mGridHorizontalSpacing != 0) {
                                 mPaint.setStrokeWidth(mGridHorizontalSpacing);
                             }
                             Path path = new Path();
-                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
-                                    , myT - mThickness);
-                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
+                                    , myT - mCurrentThickness);
+                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
@@ -934,28 +917,28 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     } else if (isFirstGridRow(viewPosition, columnSize)) {
 
                         if (mGridTopVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
                             path.moveTo(myL
-                                    , myT - mThickness / 2);
+                                    , myT - mCurrentThickness / 2);
                             path.lineTo(myR
-                                    , myT - mThickness / 2);
+                                    , myT - mCurrentThickness / 2);
                             c.drawPath(path, mPaint);
 
                         }
 
                         if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             if (mGridRightVisible) {
 
                                 int alterY = 0;
                                 if (isLastSecondGridRowNotDivided(viewPosition, itemSize, columnSize)) {
-                                    alterY = (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing);
+                                    alterY = (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing);
                                 }
                                 Path path = new Path();
-                                path.moveTo(myR + mThickness / 2
-                                        , myT - mThickness);
-                                path.lineTo(myR + mThickness / 2
+                                path.moveTo(myR + mCurrentThickness / 2
+                                        , myT - mCurrentThickness);
+                                path.lineTo(myR + mCurrentThickness / 2
                                         , myB + alterY);
                                 c.drawPath(path, mPaint);
                             }
@@ -964,9 +947,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                                 mPaint.setStrokeWidth(mGridHorizontalSpacing);
                             }
                             Path path = new Path();
-                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
-                                    , myT - mThickness);
-                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
+                                    , myT - mCurrentThickness);
+                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
@@ -974,29 +957,29 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     } else if (isFirstGridColumn(viewPosition, columnSize)) {
 
                         if (mGridLeftVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             Path path = new Path();
-                            path.moveTo(myL - mThickness / 2
+                            path.moveTo(myL - mCurrentThickness / 2
                                     , myT);
-                            path.lineTo(myL - mThickness / 2
+                            path.lineTo(myL - mCurrentThickness / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
 
-                        mPaint.setStrokeWidth(mThickness);
+                        mPaint.setStrokeWidth(mCurrentThickness);
                         if (mGridHorizontalSpacing != 0) {
                             mPaint.setStrokeWidth(mGridHorizontalSpacing);
                         }
                         Path path = new Path();
-                        path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                        path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                 , myT);
-                        path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                        path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                 , myB);
                         c.drawPath(path, mPaint);
 
                     } else {
 
-                        mPaint.setStrokeWidth(mThickness);
+                        mPaint.setStrokeWidth(mCurrentThickness);
 
                         if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
 
@@ -1004,12 +987,12 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
                                 int alterY = 0;
                                 if (isLastSecondGridRowNotDivided(viewPosition, itemSize, columnSize)) {
-                                    alterY = (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing);
+                                    alterY = (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing);
                                 }
                                 Path path = new Path();
-                                path.moveTo(myR + mThickness / 2
-                                        , myT - (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing));
-                                path.lineTo(myR + mThickness / 2
+                                path.moveTo(myR + mCurrentThickness / 2
+                                        , myT - (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing));
+                                path.lineTo(myR + mCurrentThickness / 2
                                         , myB + alterY);
                                 c.drawPath(path, mPaint);
                             }
@@ -1018,9 +1001,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                                 mPaint.setStrokeWidth(mGridHorizontalSpacing);
                             }
                             Path path = new Path();
-                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                            path.moveTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                     , myT);
-                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing) / 2
+                            path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing) / 2
                                     , myB);
                             c.drawPath(path, mPaint);
                         }
@@ -1029,41 +1012,41 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                     //bottom line
                     if (isLastGridRow(viewPosition, itemSize, columnSize)) {
                         if (mGridBottomVisible) {
-                            mPaint.setStrokeWidth(mThickness);
+                            mPaint.setStrokeWidth(mCurrentThickness);
                             if (itemSize == 1) {
                                 Path path = new Path();
-                                path.moveTo(myL - mThickness
-                                        , myB + mThickness / 2);
-                                path.lineTo(myR + (mGridRightVisible ? mThickness : 0)
-                                        , myB + mThickness / 2);
+                                path.moveTo(myL - mCurrentThickness
+                                        , myB + mCurrentThickness / 2);
+                                path.lineTo(myR + (mGridRightVisible ? mCurrentThickness : 0)
+                                        , myB + mCurrentThickness / 2);
                                 c.drawPath(path, mPaint);
                             } else if (isLastGridColumn(viewPosition, itemSize, columnSize)) {
                                 Path path = new Path();
-                                path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
-                                        , myB + mThickness / 2);
-                                path.lineTo(myR + mThickness
-                                        , myB + mThickness / 2);
+                                path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing)
+                                        , myB + mCurrentThickness / 2);
+                                path.lineTo(myR + mCurrentThickness
+                                        , myB + mCurrentThickness / 2);
                                 c.drawPath(path, mPaint);
                             } else {
                                 Path path = new Path();
-                                path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
-                                        , myB + mThickness / 2);
-                                path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
-                                        , myB + mThickness / 2);
+                                path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing)
+                                        , myB + mCurrentThickness / 2);
+                                path.lineTo(myR + (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing)
+                                        , myB + mCurrentThickness / 2);
                                 c.drawPath(path, mPaint);
                             }
 
                         }
                     } else {
-                        mPaint.setStrokeWidth(mThickness);
+                        mPaint.setStrokeWidth(mCurrentThickness);
                         if (mGridVerticalSpacing != 0) {
                             mPaint.setStrokeWidth(mGridVerticalSpacing);
                         }
                         Path path = new Path();
-                        path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mThickness : mGridHorizontalSpacing)
-                                , myB + (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing) / 2);
+                        path.moveTo(myL - (mGridHorizontalSpacing == 0 ? mCurrentThickness : mGridHorizontalSpacing)
+                                , myB + (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing) / 2);
                         path.lineTo(myR
-                                , myB + (mGridVerticalSpacing == 0 ? mThickness : mGridVerticalSpacing) / 2);
+                                , myB + (mGridVerticalSpacing == 0 ? mCurrentThickness : mGridVerticalSpacing) / 2);
                         c.drawPath(path, mPaint);
                     }
                 }
@@ -1086,9 +1069,9 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         int x;
         int y;
-        int borderThickness = mThickness;
+        int borderThickness = mCurrentThickness;
         if (tag == 0) {
-            x = y = mThickness;
+            x = y = mCurrentThickness;
             mGridVerticalSpacing = mGridHorizontalSpacing = 0;
         } else if (tag == 1) {
             x = mBmp.getWidth();
@@ -1099,13 +1082,13 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             if (mGridHorizontalSpacing != 0) {
                 x = mGridHorizontalSpacing;
             } else {
-                x = mThickness;
+                x = mCurrentThickness;
             }
 
             if (mGridVerticalSpacing != 0) {
                 y = mGridVerticalSpacing;
             } else {
-                y = mThickness;
+                y = mCurrentThickness;
             }
 
         }

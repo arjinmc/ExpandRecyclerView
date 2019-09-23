@@ -6,7 +6,7 @@ package com.arjinmc.recyclerviewdecoration;
  * email: arjinmc@hotmail.com
  */
 
-public final class RVItemDecorationConst {
+final class RVItemDecorationConst {
 
     /**
      * mode for direction
