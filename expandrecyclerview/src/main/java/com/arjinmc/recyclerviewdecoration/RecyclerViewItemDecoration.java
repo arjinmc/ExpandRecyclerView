@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.regex.Pattern;
-
 /**
  * RecycleView item decoration
  * Created by Eminem Lo on 24/11/15.
@@ -229,19 +227,10 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
     }
 
-    /**
-     * judge is a color string like #xxxxxx or #xxxxxxxx
-     *
-     * @param colorStr
-     * @return
-     */
-    public static boolean isColorString(String colorStr) {
-        return Pattern.matches("^#([0-9a-fA-F]{6}||[0-9a-fA-F]{8})$", colorStr);
-    }
-
     private boolean isPureLine() {
-        if (mDashGap == 0 && mDashWidth == 0)
+        if (mDashGap == 0 && mDashWidth == 0) {
             return true;
+        }
         return false;
     }
 
@@ -1341,7 +1330,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         public Builder color(String color) {
-            if (isColorString(color)) {
+            if (RVItemDecorationUtil.isColorString(color)) {
                 params.color = Color.parseColor(color);
             }
             return this;

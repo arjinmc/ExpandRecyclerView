@@ -65,18 +65,21 @@ public class MainActivity extends AppCompatActivity {
                 jumpToActivity(ViewPagerDemoActivity.class);
                 break;
             case 2:
-                jumpToActivity(GroupListActivity.class);
+                jumpToActivity(GridDiverActivity.class);
                 break;
             case 3:
-                jumpToActivity(GroupGridActivity.class);
+                jumpToActivity(GroupListActivity.class);
                 break;
             case 4:
-                jumpToActivity(GroupStickyActivity.class);
+                jumpToActivity(GroupGridActivity.class);
                 break;
             case 5:
-                jumpToActivity(DragItemActivity.class);
+                jumpToActivity(GroupStickyActivity.class);
                 break;
             case 6:
+                jumpToActivity(DragItemActivity.class);
+                break;
+            case 7:
                 jumpToActivity(LooperLinearLayoutActivity.class);
                 break;
             default:

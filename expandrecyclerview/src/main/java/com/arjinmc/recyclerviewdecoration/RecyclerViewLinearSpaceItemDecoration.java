@@ -9,9 +9,9 @@ import android.graphics.Color;
  * email: arjinmc@hotmail.com
  */
 
-public class RecyclerViewSpaceItemDecoration {
+public class RecyclerViewLinearSpaceItemDecoration {
 
-    public RecyclerViewSpaceItemDecoration() {
+    public RecyclerViewLinearSpaceItemDecoration() {
         throw new RuntimeException("Use Builder to create!");
     }
 
@@ -30,27 +30,10 @@ public class RecyclerViewSpaceItemDecoration {
             return this;
         }
 
-        public Builder marginHorizontal(int margin) {
-            param.marginHorizontal = margin;
-            return this;
-        }
-
-        public Builder marginVertical(int margin) {
-            param.marginVertical = margin;
-            return this;
-        }
-
-        public Builder ignoreTypes(int[] ignoreTypes){
-            param.ignoreTypes = ignoreTypes;
-            return this;
-        }
-
         public RecyclerViewItemDecoration create() {
 
             return new RecyclerViewItemDecoration.Builder(context)
                     .thickness(param.margin)
-                    .gridHorizontalSpacing(param.marginHorizontal)
-                    .gridVerticalSpacing(param.marginVertical)
                     .color(Color.TRANSPARENT)
                     .ignoreTypes(param.ignoreTypes)
                     .create();
@@ -61,8 +44,6 @@ public class RecyclerViewSpaceItemDecoration {
     public static class Param {
 
         public int margin;
-        public int marginHorizontal;
-        public int marginVertical;
         public int[] ignoreTypes;
 
     }

@@ -4,6 +4,7 @@
     <string-array name="best_practices">
         <item>List</item>
         <item>Viewpager</item>
+        <item>Grid Diver</item>
         <item>GroupList</item>
         <item>GroupGrid</item>
         <item>GroupSticky</item>
