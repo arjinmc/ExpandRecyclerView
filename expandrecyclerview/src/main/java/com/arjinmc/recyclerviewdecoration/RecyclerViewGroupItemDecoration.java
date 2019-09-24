@@ -12,7 +12,6 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -1293,9 +1292,16 @@ public class RecyclerViewGroupItemDecoration extends RecyclerView.ItemDecoration
 
         if (parent.getLayoutManager() != null) {
             if (parent.getLayoutManager() instanceof GridLayoutManager) {
+                if (((GridLayoutManager) parent.getLayoutManager()).getOrientation() == RecyclerView.HORIZONTAL) {
+                    try {
+                        throw new IllegalAccessException("GridLayoutManager orientation HORIZONTAL is not supported");
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
                 mMode = RVItemDecorationConst.MODE_GRID;
             } else if (parent.getLayoutManager() instanceof LinearLayoutManager) {
-                if (((LinearLayoutManager) parent.getLayoutManager()).getOrientation() == LinearLayout.HORIZONTAL) {
+                if (((LinearLayoutManager) parent.getLayoutManager()).getOrientation() == RecyclerView.HORIZONTAL) {
                     mMode = RVItemDecorationConst.MODE_VERTICAL;
                 } else {
                     mMode = RVItemDecorationConst.MODE_HORIZONTAL;

@@ -1270,6 +1270,13 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         if (parent.getLayoutManager() != null) {
             if (parent.getLayoutManager() instanceof GridLayoutManager) {
+                if (((GridLayoutManager) parent.getLayoutManager()).getOrientation() == RecyclerView.HORIZONTAL) {
+                    try {
+                        throw new IllegalAccessException("GridLayoutManager orientation HORIZONTAL is not supported");
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
                 mMode = RVItemDecorationConst.MODE_GRID;
             } else if (parent.getLayoutManager() instanceof LinearLayoutManager) {
                 if (((LinearLayoutManager) parent.getLayoutManager()).getOrientation() == RecyclerView.HORIZONTAL) {
