@@ -61,7 +61,10 @@ public class RecyclerViewGridSpaceItemDecoration extends RecyclerView.ItemDecora
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
+
+        if (parent.getChildCount() == 0) {
+            return;
+        }
 
         if (parent.getLayoutManager() instanceof GridLayoutManager) {
 
