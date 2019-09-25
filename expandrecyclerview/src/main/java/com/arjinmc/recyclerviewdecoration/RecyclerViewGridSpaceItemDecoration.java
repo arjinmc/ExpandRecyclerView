@@ -76,7 +76,8 @@ public class RecyclerViewGridSpaceItemDecoration extends RecyclerView.ItemDecora
             }
             int position = parent.getChildAdapterPosition(view);
             int spanCount = layoutManager.getSpanCount();
-            int column = position % spanCount;
+            GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+            int column = lp.getSpanIndex();
             getGridItemOffsets(outRect, position, column, spanCount);
         } else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager) {
             StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) parent.getLayoutManager();
@@ -132,16 +133,25 @@ public class RecyclerViewGridSpaceItemDecoration extends RecyclerView.ItemDecora
         }
 
         public Builder margin(int margin) {
+            if (margin < 0) {
+                margin = 0;
+            }
             param.margin = margin;
             return this;
         }
 
         public Builder marginHorizontal(int margin) {
+            if (margin < 0) {
+                margin = 0;
+            }
             param.marginHorizontal = margin;
             return this;
         }
 
         public Builder marginVertical(int margin) {
+            if (margin < 0) {
+                margin = 0;
+            }
             param.marginVertical = margin;
             return this;
         }
