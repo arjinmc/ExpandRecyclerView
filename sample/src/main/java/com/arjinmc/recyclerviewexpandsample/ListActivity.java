@@ -14,7 +14,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewMultipleTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
-import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
+import com.arjinmc.recyclerviewdecoration.RecyclerViewLinearItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.exception.OutOfRangeException;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 import com.arjinmc.recyclerviewexpandsample.model.Mode;
@@ -69,7 +69,7 @@ public class ListActivity extends AppCompatActivity {
 
         mRvList = findViewById(R.id.rv_list);
         RecyclerViewStyleHelper.toLinearLayout(mRvList, RecyclerView.VERTICAL);
-        mRvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
+        mRvList.addItemDecoration(new RecyclerViewLinearItemDecoration.Builder(this)
                 .color(Color.GREEN)
                 .thickness(1)
                 .create());

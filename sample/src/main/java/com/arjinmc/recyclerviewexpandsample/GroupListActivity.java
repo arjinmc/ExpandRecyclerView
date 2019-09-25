@@ -21,7 +21,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewGroupTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
-import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
+import com.arjinmc.recyclerviewdecoration.RecyclerViewLinearItemDecoration;
 import com.arjinmc.recyclerviewexpandsample.model.Car;
 import com.arjinmc.recyclerviewexpandsample.model.Mode;
 
@@ -99,7 +99,7 @@ public class GroupListActivity extends AppCompatActivity {
 
         RecyclerView rvList = (RecyclerView) findViewById(R.id.rv_list);
         RecyclerViewStyleHelper.toLinearLayout(rvList, RecyclerView.VERTICAL);
-        rvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
+        rvList.addItemDecoration(new RecyclerViewLinearItemDecoration.Builder(this)
                 .color(Color.GRAY)
                 .thickness(3)
                 .create());

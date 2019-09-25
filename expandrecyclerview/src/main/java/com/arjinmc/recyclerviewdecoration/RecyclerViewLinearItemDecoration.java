@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Eminem Lo on 24/11/15.
  * Email arjinmc@hotmail.com
  */
-public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
+public class RecyclerViewLinearItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * default decoration color
@@ -85,7 +85,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
     private boolean hasGetParentLayoutMode = false;
     private Context mContext;
 
-    public RecyclerViewItemDecoration() {
+    public RecyclerViewLinearItemDecoration() {
     }
 
     public void setParams(Context context, Param params) {
@@ -486,7 +486,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
                 }
             } else {
                 try {
-                    throw new IllegalAccessException("RecyclerViewItemDecoration only support LinearLayoutManager");
+                    throw new IllegalAccessException("RecyclerViewLinearItemDecoration only support LinearLayoutManager");
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                     return;
@@ -495,7 +495,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         } else {
             try {
-                throw new IllegalAccessException("RecyclerViewItemDecoration only support LinearLayoutManager");
+                throw new IllegalAccessException("RecyclerViewLinearItemDecoration only support LinearLayoutManager");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
                 return;
@@ -536,10 +536,10 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
         }
 
-        public RecyclerViewItemDecoration create() {
-            RecyclerViewItemDecoration recyclerViewItemDecoration = new RecyclerViewItemDecoration();
-            recyclerViewItemDecoration.setParams(context, params);
-            return recyclerViewItemDecoration;
+        public RecyclerViewLinearItemDecoration create() {
+            RecyclerViewLinearItemDecoration recyclerViewLinearItemDecoration = new RecyclerViewLinearItemDecoration();
+            recyclerViewLinearItemDecoration.setParams(context, params);
+            return recyclerViewLinearItemDecoration;
         }
 
         public Builder drawableID(@DrawableRes int drawableID) {

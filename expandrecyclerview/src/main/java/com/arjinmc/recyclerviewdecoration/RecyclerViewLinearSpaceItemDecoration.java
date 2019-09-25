@@ -30,9 +30,9 @@ public class RecyclerViewLinearSpaceItemDecoration {
             return this;
         }
 
-        public RecyclerViewItemDecoration create() {
+        public RecyclerViewLinearItemDecoration create() {
 
-            return new RecyclerViewItemDecoration.Builder(context)
+            return new RecyclerViewLinearItemDecoration.Builder(context)
                     .thickness(param.margin)
                     .color(Color.TRANSPARENT)
                     .ignoreTypes(param.ignoreTypes)

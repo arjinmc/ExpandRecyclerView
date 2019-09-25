@@ -12,7 +12,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewAdapter;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewSingleTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
-import com.arjinmc.recyclerviewdecoration.RecyclerViewItemDecoration;
+import com.arjinmc.recyclerviewdecoration.RecyclerViewLinearItemDecoration;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView rvList = findViewById(R.id.rv_list);
-        rvList.addItemDecoration(new RecyclerViewItemDecoration.Builder(this)
+        rvList.addItemDecoration(new RecyclerViewLinearItemDecoration.Builder(this)
                 .color(Color.GRAY)
                 .thickness(5)
                 .create());
