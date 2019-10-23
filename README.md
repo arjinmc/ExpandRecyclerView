@@ -3,6 +3,8 @@ A lib for expand RecyclerView,including adapter,style and so on.
 
 More information pls find out in the sample and Wiki documents.
 If you have any questions pls file a issue. I'm appreciated that you tell me if you find some bugs.
+  
+Documents are here [Wiki](https://github.com/arjinmc/ExpandRecyclerView/wiki)  
 
 [中文版](README_CN.md)
 

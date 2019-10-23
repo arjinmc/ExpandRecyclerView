@@ -3,6 +3,8 @@
 
 具体使用方式请看sample，还有Wiki文档中的说明。  
 如果有什么不懂的地方，欢迎骚扰。如果你在使用的过程中发现了bug，请告诉我，非常感谢。
+  
+文档在这里 [Wiki](https://github.com/arjinmc/ExpandRecyclerView/wiki)  
 
 [更新日志](NEWS_CN.md)
 
