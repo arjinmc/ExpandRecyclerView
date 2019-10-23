@@ -1,3 +1,7 @@
+# v3.0 release(2019/10/23)
+RecyclerViewItemDecoration changes to RecyclerViewLinearItemDecoration and RecyclerViewGridItemDecoration (not support color with alpha).  
+RecyclerViewSpaceDecoration changes to RecyclerViewLinearSpaceItemDecoration and RecyclerViewGridSpaceItemDecoration  ( support StaggeredGridLayoutManager) .
+
 # v2.1 release(2019/09/20)
 Fix fit RecyclerView padding for LinearLayoutManger.
 

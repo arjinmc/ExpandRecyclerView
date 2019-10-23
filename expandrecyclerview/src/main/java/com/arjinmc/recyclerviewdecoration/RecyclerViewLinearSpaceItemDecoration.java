@@ -3,13 +3,15 @@ package com.arjinmc.recyclerviewdecoration;
 import android.content.Context;
 import android.graphics.Color;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * RecycleView item decoration for only empty spacing
  * Created by Eminem Lo on 2017/9/7.
  * email: arjinmc@hotmail.com
  */
 
-public class RecyclerViewLinearSpaceItemDecoration {
+public class RecyclerViewLinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     public RecyclerViewLinearSpaceItemDecoration() {
         throw new RuntimeException("Use Builder to create!");

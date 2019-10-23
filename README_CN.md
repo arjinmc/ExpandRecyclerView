@@ -12,7 +12,7 @@
 
 ### Gradle
 ```code
-compile 'com.arjinmc.android:expandrecyclerview:2.1'
+compile 'com.arjinmc.android:expandrecyclerview:3.0'
 ```
 
 ### Maven
@@ -20,7 +20,7 @@ compile 'com.arjinmc.android:expandrecyclerview:2.1'
 <dependency>
     <groupId>com.arjinmc.android</groupId>
     <artifactId>expandrecyclerview</artifactId>
-    <version>2.1</version>
+    <version>3.0</version>
     <type>pom</type>
 </dependency>
 ```
