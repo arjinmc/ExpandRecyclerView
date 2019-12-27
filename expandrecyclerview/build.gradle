@@ -7,7 +7,7 @@ android {
         minSdkVersion 15
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 14
-        versionName '3.0'
+        versionName '3.0.1'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

@@ -1,3 +1,6 @@
+# v3.0.1 release(2019/12/27)
+修复 RecyclerViewStickyHeadItemDecoration bug.
+
 # v3.0 release(2019/10/23)
 RecyclerViewItemDecoration 变成 RecyclerViewLinearItemDecoration 和 RecyclerViewGridItemDecoration (不支持带透明通道的颜色值).  
 RecyclerViewSpaceDecoration 变成 RecyclerViewLinearSpaceItemDecoration 和 RecyclerViewGridSpaceItemDecoration  ( 支持 StaggeredGridLayoutManager) .
