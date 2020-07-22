@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 jumpToActivity(DragItemActivity.class);
                 break;
             case 7:
+                jumpToActivity(ListStickyActivity.class);
+                break;
+            case 8:
                 jumpToActivity(LooperLinearLayoutActivity.class);
                 break;
             default:

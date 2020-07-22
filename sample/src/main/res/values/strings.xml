@@ -9,6 +9,7 @@
         <item>GroupGrid</item>
         <item>GroupSticky</item>
         <item>DragItem</item>
+        <item>ListSticky</item>
         <item>LooperLinearLayoutManager</item>
     </string-array>
 </resources>
