@@ -10,6 +10,13 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 public abstract class RecyclerViewItemWrapper<E> {
 
     /**
+     * Get the resource id of layout xml file
+     *
+     * @return
+     */
+    public abstract int getLayoutResId();
+
+    /**
      * OnBind view
      * Override for your real item view detail
      * user holder.getView(id) to find your view

@@ -2,7 +2,6 @@ package com.arjinmc.recyclerviewdecoration;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -89,12 +88,7 @@ public class RecyclerViewStickyHeadItemDecoration extends RecyclerView.ItemDecor
                             } else {
                                 int currentPosition = layoutManager.findFirstVisibleItemPosition() + i;
                                 int indexOfCurrentPosition = mStickyPositionList.lastIndexOf(currentPosition);
-                                Log.e("currentPosition", "currentPosition：" + layoutManager.findFirstVisibleItemPosition() + ",i:" + i + "，indexOfCurrentPosition：" + indexOfCurrentPosition);
-                                if (indexOfCurrentPosition >= 1) {
-                                    bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1));
-                                } else {
-                                    mStickyView = null;
-                                }
+                                bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1));
                             }
                         }
                     }

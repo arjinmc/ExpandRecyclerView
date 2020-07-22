@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -27,6 +25,7 @@ import com.arjinmc.recyclerviewexpandsample.model.Car;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Eminem Lo on 30/6/2020.
@@ -34,10 +33,7 @@ import java.util.List;
  */
 public class ListStickyActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private int mNewDataPosition = -1;
-    private CheckBox mCbIsGroup;
-    private EditText mEtPosition;
-    private Button mBtnAdd, mBtnRemove, mBtnUpdate;
+    private Button mBtnUpdate;
     private RecyclerView mRvList;
     private RecyclerViewAdapter mAdapter;
     private List<Car> mDataList = new ArrayList<>();
@@ -46,6 +42,11 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
      * define item view for group
      */
     private RecyclerViewItemWrapper mRvGroup = new RecyclerViewItemWrapper<Car>() {
+        @Override
+        public int getLayoutResId() {
+            return R.layout.item_group_type;
+        }
+
         @Override
         public void onBind(RecyclerViewViewHolder holder, int position, Car car) {
             TextView tvGroup = holder.getView(R.id.tv_group);
@@ -63,6 +64,11 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
      */
     private RecyclerViewItemWrapper mRvItem = new RecyclerViewItemWrapper<Car>() {
         @Override
+        public int getLayoutResId() {
+            return R.layout.item_list_type1;
+        }
+
+        @Override
         public void onBind(RecyclerViewViewHolder holder, int position, Car car) {
             TextView tvContent = holder.getView(R.id.tv_content);
             tvContent.setText(car.getBrand());
@@ -79,18 +85,10 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_sticky);
 
-        mCbIsGroup = findViewById(R.id.cb_is_group);
-        mEtPosition = findViewById(R.id.et_position);
-        mBtnAdd = findViewById(R.id.btn_add);
-        mBtnRemove = findViewById(R.id.btn_remove);
         mBtnUpdate = findViewById(R.id.btn_update);
         mRvList = findViewById(R.id.rv_list);
 
-        mBtnAdd = findViewById(R.id.btn_add);
-        mBtnRemove = findViewById(R.id.btn_remove);
         mBtnUpdate = findViewById(R.id.btn_update);
-        mBtnAdd.setOnClickListener(this);
-        mBtnRemove.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);
 
         RecyclerViewStyleHelper.toLinearLayout(mRvList, RecyclerView.VERTICAL);
@@ -118,7 +116,7 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
         }
 
         mAdapter = new RecyclerViewAdapter<>(this, mDataList
-                , new int[]{R.layout.item_group_type, R.layout.item_list_type1}
+                , new int[]{mRvGroup.getLayoutResId(), mRvItem.getLayoutResId()}
                 , new RecyclerViewMultipleTypeProcessor<Car>() {
             @Override
             public void onBindViewHolder(RecyclerViewViewHolder holder, int position, Car car) {
@@ -143,8 +141,6 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initListener() {
-        mBtnAdd.setOnClickListener(this);
-        mBtnRemove.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);
 
         mRvList.addOnItemTouchListener(new OnRecyclerViewItemClickListener() {
@@ -161,29 +157,22 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_add:
-                break;
-            case R.id.btn_remove:
-                break;
             case R.id.btn_update:
+                updateData();
                 break;
             default:
                 break;
         }
     }
 
-    private Integer getPosition() {
-        Integer position = null;
-        try {
-            position = Integer.valueOf(mEtPosition.getText().toString());
-        } catch (Exception e) {
-
-        }
-        return position;
+    private void updateData() {
+        Random random = new Random();
+        mDataList.get(0).setGroup("hi" + random.nextInt(100));
+        mAdapter.notifyDataChanged(mDataList);
+        Log.e("item", mDataList.get(0).getGroup());
     }
 
 }
