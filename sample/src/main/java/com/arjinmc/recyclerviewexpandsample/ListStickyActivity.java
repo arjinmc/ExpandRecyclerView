@@ -19,6 +19,7 @@ import com.arjinmc.expandrecyclerview.adapter.RecyclerViewMultipleTypeProcessor;
 import com.arjinmc.expandrecyclerview.adapter.RecyclerViewViewHolder;
 import com.arjinmc.expandrecyclerview.item.RecyclerViewItemWrapper;
 import com.arjinmc.expandrecyclerview.listener.OnRecyclerViewItemClickListener;
+import com.arjinmc.expandrecyclerview.listener.OnRecyclerViewItemLongClickListener;
 import com.arjinmc.expandrecyclerview.style.RecyclerViewStyleHelper;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewLinearItemDecoration;
 import com.arjinmc.recyclerviewdecoration.RecyclerViewStickyHeadItemDecoration;
@@ -63,7 +64,6 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
     private RecyclerViewItemWrapper mRvItem = new RecyclerViewItemWrapper<Car>() {
         @Override
         public void onBind(RecyclerViewViewHolder holder, int position, Car car) {
-            Log.e("item",holder.itemView==null?"empty":"not");
             TextView tvContent = holder.getView(R.id.tv_content);
             tvContent.setText(car.getBrand());
         }
@@ -152,7 +152,8 @@ public class ListStickyActivity extends AppCompatActivity implements View.OnClic
             public void onItemClick(RecyclerView.ViewHolder viewHolder, int position) {
                 Log.e("onItemClick", "position:" + position);
             }
-
+        });
+        mRvList.addOnItemTouchListener(new OnRecyclerViewItemLongClickListener() {
             @Override
             public void onItemLongClick(RecyclerView.ViewHolder viewHolder, int position) {
                 Log.e("onItemLongClick", "position:" + position);

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Eminem Lo on 2018/12/3.
  * email: arjinmc@hotmail.com
  */
-public abstract class OnRecyclerViewItemClickListener extends GestureDetector.SimpleOnGestureListener
+public abstract class OnRecyclerViewItemLongClickListener extends GestureDetector.SimpleOnGestureListener
         implements RecyclerView.OnItemTouchListener {
 
     private RecyclerView mRecyclerView;
@@ -41,18 +41,17 @@ public abstract class OnRecyclerViewItemClickListener extends GestureDetector.Si
     }
 
     @Override
-    public boolean onSingleTapUp(MotionEvent e) {
+    public void onLongPress(MotionEvent e) {
         if (mRecyclerView == null) {
-            return false;
+            return;
         }
         View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
         if (child != null) {
-            onItemClick(mRecyclerView.getChildViewHolder(child), mRecyclerView.getChildAdapterPosition(child));
+            onItemLongClick(mRecyclerView.getChildViewHolder(child), mRecyclerView.getChildAdapterPosition(child));
         }
-        return true;
     }
 
-    public abstract void onItemClick(RecyclerView.ViewHolder viewHolder, int position);
+    public abstract void onItemLongClick(RecyclerView.ViewHolder viewHolder, int position);
 
     private void init(RecyclerView rv) {
         if (mRecyclerView == null) {
