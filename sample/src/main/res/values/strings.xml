@@ -3,13 +3,13 @@
 
     <string-array name="best_practices">
         <item>List</item>
+        <item>ListSticky(RecyclerViewItemWrapper)</item>
         <item>Viewpager</item>
         <item>Grid Diver</item>
         <item>GroupList</item>
         <item>GroupGrid</item>
         <item>GroupSticky</item>
         <item>DragItem</item>
-        <item>ListSticky</item>
         <item>LooperLinearLayoutManager</item>
     </string-array>
 </resources>
