@@ -1,10 +1,15 @@
+# v3.2 release(2020/07/23)
+1. Fix RecyclerViewStickyHeadItemDecoration udpate when data has changed bug;
+2. Add RecyclerViewItemWrapper to make template for custom view type.
+3. Add OnRecyclerViewItemClickListener and OnRecyclerViewItemLongClickListener for RecyclerView.
+
 # v3.1 release(2019/12/27)
-1.Fix RecyclerViewStickyHeadItemDecoration bug.
-2.Add ignoreTypes for RecyclerViewLinearSpaceItemDecoration.Builder.
+1. Fix RecyclerViewStickyHeadItemDecoration bug.
+2. Add ignoreTypes for RecyclerViewLinearSpaceItemDecoration.Builder.
 
 # v3.0 release(2019/10/23)
-1.RecyclerViewItemDecoration changes to RecyclerViewLinearItemDecoration and RecyclerViewGridItemDecoration (not support color with alpha).  
-2.RecyclerViewSpaceDecoration changes to RecyclerViewLinearSpaceItemDecoration and RecyclerViewGridSpaceItemDecoration  ( support StaggeredGridLayoutManager) .
+1. RecyclerViewItemDecoration changes to RecyclerViewLinearItemDecoration and RecyclerViewGridItemDecoration (not support color with alpha).
+2. RecyclerViewSpaceDecoration changes to RecyclerViewLinearSpaceItemDecoration and RecyclerViewGridSpaceItemDecoration  ( support StaggeredGridLayoutManager) .
 
 # v2.1 release(2019/09/20)
 Fix fit RecyclerView padding for LinearLayoutManger.
