@@ -88,6 +88,9 @@ public class RecyclerViewStickyHeadItemDecoration extends RecyclerView.ItemDecor
                             } else {
                                 int currentPosition = layoutManager.findFirstVisibleItemPosition() + i;
                                 int indexOfCurrentPosition = mStickyPositionList.lastIndexOf(currentPosition);
+                                if (indexOfCurrentPosition <= 0) {
+                                    return;
+                                }
                                 bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1));
                             }
                         }
