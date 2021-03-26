@@ -12,6 +12,20 @@
 
 这个库包含[RecyclerViewDecoration](https://github.com/arjinmc/RecyclerViewDecoration).如果你已经使用了<strong>RecyclerViewDecoration</strong>, 请删除它。
 
+### JitPack
+```code 
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+     implementation 'com.github.arjinmc:ExpandRecyclerView:3.2'
+}
+```
+
 ### Gradle
 ```code
 compile 'com.arjinmc.android:expandrecyclerview:3.2'

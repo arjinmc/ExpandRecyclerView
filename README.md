@@ -14,6 +14,20 @@ Documents are here [Wiki](https://github.com/arjinmc/ExpandRecyclerView/wiki)
 
 This lib included [RecyclerViewDecoration](https://github.com/arjinmc/RecyclerViewDecoration).If you have used <strong>RecyclerViewDecoration</strong>, pls remove it.
 
+### JitPack
+```code 
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+     implementation 'com.github.arjinmc:ExpandRecyclerView:3.2'
+}
+```
+
 ### Gradle
 ```code
 compile 'com.arjinmc.android:expandrecyclerview:3.2'
